@@ -189,7 +189,7 @@ CREATE TABLE payslip (
     confirmed_at DATETIME,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (emp_id, pay_year, pay_month),
+    UNIQUE (emp_id, pay_ym),
     FOREIGN KEY (emp_id) REFERENCES employee(emp_id)
 );
 
