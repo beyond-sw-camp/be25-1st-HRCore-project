@@ -140,7 +140,8 @@ CREATE TABLE attendance_record (
     attendance_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     emp_id BIGINT NOT NULL,
     work_type_id BIGINT NOT NULL,
-    status_id BIGINT NOT NULL,
+    status_check_in BIGINT,
+    status_check_out BIGINT,
     work_date DATE NOT NULL,
     check_in_time DATETIME,
     check_out_time DATETIME,
@@ -148,7 +149,8 @@ CREATE TABLE attendance_record (
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (emp_id) REFERENCES employee(emp_id),
     FOREIGN KEY (work_type_id) REFERENCES work_type(work_type_id),
-    FOREIGN KEY (status_id) REFERENCES attendance_status(status_id),
+    FOREIGN KEY (status_check_in) REFERENCES attendance_status(status_id),
+    FOREIGN KEY (status_check_out) REFERENCES attendance_status(status_id),
     UNIQUE (emp_id, work_date)
 );
 
