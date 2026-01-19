@@ -27,7 +27,7 @@
 ## 📉 유스케이스 다이어그램
 
 ## 📟 ERD
-
+![ERD](https://raw.githubusercontent.com/beyond-sw-camp/be25-1st-HRCore-project/b85ec941267da52b9ed53e91d1cdb002e2f95329/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/ERD/HRCore_ERD.png)
 ## 📔 테이블 명세서
 
 ## 💻 SQL 산출물
