@@ -40,6 +40,7 @@
 이를 통해 본 프로젝트는 단순한 인사 정보 관리 수준을 넘어, 중소기업 환경에 적합한 통합 HR 관리 시스템 설계 모델을 제시하고 향후 종합 HR 그룹웨어로 발전할 수 있는 기반을 마련하고자 한다.
 
 [참고자료]
+
 (https://www.hankyung.com/article/202309268924i?utm_source=chatgpt.com)
 
 (https://www.talkspirit.com/blog/why-hr-digital-transformation-is-essential-in-modern-businesses?utm_source=chatgpt.com)
@@ -65,7 +66,7 @@
 [유스케이스 다이어그램_인사](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9C%A0%EC%8A%A4%EC%BC%80%EC%9D%B4%EC%8A%A4_%EC%8B%9C%EC%8A%A4%ED%85%9C.png?raw=true)
 
 ## 📟 ERD <a id="erd"></a>
-![ERD](https://raw.githubusercontent.com/beyond-sw-camp/be25-1st-HRCore-project/b85ec941267da52b9ed53e91d1cdb002e2f95329/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/ERD/HRCore_ERD.png)
+![ERD](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/ERD/erd_%EC%B5%9C%EC%A2%85.png?raw=true)
 [ERD](https://www.erdcloud.com/d/hLqoWtFvg3D66TXxy)
 
 ## 📔 테이블 명세서 <a id="table"></a>
