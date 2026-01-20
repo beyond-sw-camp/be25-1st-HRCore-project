@@ -1,7 +1,7 @@
 
 # HRCore_project📝
 <p align="center">
-  <img src="https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/WDQlogo.png?raw=true" width="500px">
+  <img src="https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/WDQlogo.png?raw=true" width="500px">
 </p>
 
 ## 📌목차
@@ -24,29 +24,31 @@
 ---
 ## 🗃️ 프로젝트 개요
 
-![관련 뉴스 기사](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%83%88%20%ED%8F%B4%EB%8D%94/background2.png?raw=true)
+<p align="center">
+  <img src="https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/background/background2.png?raw=true" width="900px">
+</p>
 
 조직 규모가 작을 경우 엑셀이나 간단한 문서 관리만으로도 인사 및 근태 관리가 가능하지만, 인원이 증가하고 조직 구조가 복잡해질수록 근무 유형, 휴가 정책, 급여 산정 기준 등 인사 제도 역시 다양해지며 기존의 수동적인 관리 방식은 한계에 도달하게 된다.
 특히 중소기업의 경우 전용 HR 시스템 도입이 어려워 인사·근태·급여 관리가 엑셀이나 수기 문서에 의존하는 경우가 많으며, 이로 인해 데이터 중복 및 입력 오류, 정책 적용의 불일치, 인사 변경 이력 관리의 어려움과 같은 문제가 반복적으로 발생한다.
 
 또한 인사 정보가 여러 파일과 문서로 분산되어 관리될 경우 인사 담당자의 수작업 부담이 증가하고, 근태·휴가·급여 산정 기준이 명확하게 관리되지 않아 조직 운영의 투명성과 신뢰성을 저하시킬 수 있다. 승인 절차나 정책 변경 이력을 체계적으로 추적하기 어려운 점 역시 인사 관리의 중요한 문제로 작용한다.
 
-![관련 뉴스 기사](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%83%88%20%ED%8F%B4%EB%8D%94/background1.jpg?raw=true)
-
-
 본 프로젝트는 이러한 문제를 해결하기 위해 인사·근태·휴가·급여 데이터를 하나의 시스템으로 통합 관리할 수 있는 HR 관리 시스템의 데이터베이스 구조를 설계·구현하는 것을 목표로 한다. HR 관련 데이터를 중앙 집중적으로 관리함으로써 데이터의 일관성과 정확성을 확보하고, 표준화된 인사 정책 및 업무 프로세스를 통해 효율적인 인사 관리 체계를 구축하고자 한다.
 
 특히 승인 및 변경 이력 기반의 데이터 구조를 설계하여 인사 데이터의 투명성과 추적 가능성을 확보하고, 근속연수 기반 연차 산정, 급여 항목 집계 등 반복적인 관리 업무를 시스템적으로 자동화할 수 있는 기반을 마련한다. 또한 향후 조직 규모 확대, 인사 정책 변경, 급여·세무 등 HR 서비스 기능 확장에 유연하게 대응할 수 있도록 확장성과 유지보수성을 고려한 구조를 설계하는 것을 지향한다.
 
+[참고자료]
+(https://www.hankyung.com/article/202309268924i?utm_source=chatgpt.com)
 (https://www.talkspirit.com/blog/why-hr-digital-transformation-is-essential-in-modern-businesses?utm_source=chatgpt.com)
 (https://en.wikipedia.org/wiki/Human_resource_management_system?utm_source)
+(https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/background/background1.jpg?raw=true)
 
 이를 통해 본 프로젝트는 단순한 인사 정보 관리 수준을 넘어, 중소기업 환경에 적합한 통합 HR 관리 시스템 설계 모델을 제시하고 향후 종합 HR 그룹웨어로 발전할 수 있는 기반을 마련하고자 한다.
 
 
 
 ## 📊 WBS
-![WBS](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/WBS.png?raw=true)
+![WBS](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/WBS.png?raw=true)
 
 ## 📄 요구사항 정의서
 ![요구사항 정의서](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD%20%EC%A0%95%EC%9D%98%EC%84%9C.png?raw=true)
@@ -257,20 +259,19 @@ CREATE TABLE overtime_record (
     reason TEXT,
     reject_reason TEXT,
     approval_status ENUM('PENDING','APPROVED','REJECTED') NOT NULL DEFAULT 'PENDING',
-    approved_by BIGINT NULL,
-	 approved_at DATETIME NULL,
-	 rejected_by BIGINT NULL,
-    rejected_at DATETIME NULL,
     overtime_type VARCHAR(20),
+    decided_by BIGINT ,
+    decided_at DATETIME,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (emp_id) REFERENCES employee(emp_id),
+    FOREIGN KEY (decided_by) REFERENCES employee(emp_id),
     CHECK (
-      (approval_status = 'PENDING'  AND approved_at IS NULL AND rejected_at IS NULL)
+      (approval_status = 'PENDING')
       OR
-      (approval_status = 'APPROVED' AND approved_at IS NOT NULL AND rejected_at IS NULL)
+      (approval_status = 'APPROVED')
       OR
-      (approval_status = 'REJECTED' AND rejected_at IS NOT NULL AND approved_at IS NULL)
+      (approval_status = 'REJECTED')
     )
 );
 ```
