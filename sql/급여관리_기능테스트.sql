@@ -27,55 +27,12 @@ BEGIN
 END$$
 DELIMITER ;
 
--- 기본급 등록
-CALL pay_item_create(
-    'BASE_SALARY',
-    '기본급',
-    'EARN',
-    'RULE',
-    NULL,
-    'Y'
-);
-
--- 공제 항목(4대 보험) 등록
-CALL pay_item_create(
-    'HEALTH_INSURANCE',
-    '건강보험',
-    'DEDUCT',
-    'RATE',
-    9.5,
-    'N'
-);
-
-CALL pay_item_create(
-    'NATIONAL_PENSION',
-    '국민연금',
-    'DEDUCT',
-    'RATE',
-    7.19,
-    'N'
-);
-
-CALL pay_item_create(
-    'EMPLOYMENT_INSURANCE',
-    '고용보험',
-    'DEDUCT',
-    'RATE',
-    1.8,
-    'N'
-);
-
-CALL pay_item_create(
-    'INDUSTRIAL_ACCIDENT_INSURANCE',
-    '산재보험',
-    'DEDUCT',
-    'RATE',
-    1.2,
-    'N'
-);
-
--- 확인
-SELECT * FROM pay_item;
+CALL pay_item_create('BASE_SALARY','기본급','EARN','RULE',NULL,'Y');
+CALL pay_item_create('HEALTH_INSURANCE','건강보험','DEDUCT','RATE',9.5,'N');
+CALL pay_item_create('NATIONAL_PENSION','국민연금','DEDUCT','RATE',7.19,'N');
+CALL pay_item_create('EMPLOYMENT_INSURANCE','고용보험','DEDUCT','RATE',1.8,'N');
+CALL pay_item_create('INDUSTRIAL_ACCIDENT_INSURANCE','산재보험','DEDUCT','RATE',1.2,'N');
+CALL pay_item_create('ABSENCE_DEDUCT','결근 공제','DEDUCT','RATE',5.0,'N');
 
 
 
@@ -264,7 +221,7 @@ BEGIN
 END$$
 DELIMITER ;
 
-CALL payslip_create(1, '2026-02');
+CALL payslip_create(2, '2026-01');
 
 -- 확인
 SELECT * FROM employee;
