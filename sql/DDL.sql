@@ -187,21 +187,19 @@ CREATE TABLE leave_request (
     reject_reason TEXT, 
     use_days DECIMAL(3,1) CHECK (use_days >= 0),
     approval_status ENUM('PENDING','APPROVED','REJECTED') NOT NULL DEFAULT 'PENDING',
-    approved_by BIGINT NULL,
-    approved_at DATETIME NULL,
-    rejected_by BIGINT NULL,
-    rejected_at DATETIME NULL,
+    decided_by BIGINT NULL,
+    decided_at DATETIME NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (emp_id) REFERENCES employee(emp_id),
+    FOREIGN KEY (decided_by) REFERENCES employee(emp_id),
     FOREIGN KEY (leave_type_id) REFERENCES leave_type(leave_type_id),
-    -- 승인/반려가 동시에 들어가면 안 됨(가능하면 DB에서 방지)
     CHECK (
-      (approval_status = 'PENDING'  AND approved_at IS NULL AND rejected_at IS NULL)
+      (approval_status = 'PENDING')
       OR
-      (approval_status = 'APPROVED' AND approved_at IS NOT NULL AND rejected_at IS NULL)
+      (approval_status = 'APPROVED')
       OR
-      (approval_status = 'REJECTED' AND rejected_at IS NOT NULL AND approved_at IS NULL)
+      (approval_status = 'REJECTED')
     )
 );
 
