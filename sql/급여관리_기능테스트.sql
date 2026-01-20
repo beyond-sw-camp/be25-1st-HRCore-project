@@ -33,7 +33,8 @@ CALL pay_item_create('NATIONAL_PENSION','국민연금','DEDUCT','RATE',7.19,'N')
 CALL pay_item_create('EMPLOYMENT_INSURANCE','고용보험','DEDUCT','RATE',1.8,'N');
 CALL pay_item_create('INDUSTRIAL_ACCIDENT_INSURANCE','산재보험','DEDUCT','RATE',1.2,'N');
 CALL pay_item_create('ABSENCE_DEDUCT','결근 공제','DEDUCT','RATE',5.0,'N');
-
+CALL pay_item_create('OVERTIME_EXTEND','연장근무 수당','EARN','RULE',NULL,'Y');
+CALL pay_item_create('OVERTIME_NIGHT','야간근무 수당','EARN','RULE',NULL,'Y');
 
 
 -- 급여 항목 기준값 수정 (요구사항 코드: PAY_ITEM_002)
