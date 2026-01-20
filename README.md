@@ -59,9 +59,16 @@
    <details>
      <summary>📌인사관리 시스템</summary>
    </details>
+   
    <details>
      <summary>📌근태관리 시스템</summary>
-     </details>
+      <details>
+       <summary>[attendance_record]</summary>
+       <br>
+       <img src="https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%ED%85%8C%EC%9D%B4%EB%B8%94%20%EC%BA%A1%EC%B3%90/attendance_record.png?raw=true" width="600px"/>
+      </details>
+  </details>
+   
    <details>
      <summary>📌급여관리 시스템</summary>
      </details>
