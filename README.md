@@ -586,7 +586,6 @@ BEGIN
     END IF;
 END$$
 DELIMITER ;
-
 ```
   </details>   
    <details>
@@ -727,7 +726,7 @@ BEGIN
 END$$
 DELIMITER ;
 ```
-  </details>   
+  </details>  
    <details>
         <summary> 부서 배정 </summary>
      
@@ -1661,6 +1660,7 @@ BEGIN
 END$$
 DELIMITER ;
 ```
+![]()
   </details>     
    </details>
   <details>
@@ -2159,6 +2159,7 @@ CALL register_employee_with_user('test02.dev@company.com','테스트사원02','0
 CALL register_employee_with_user('test03.dev@company.com','테스트사원03','010-1475-5778','940104-1653427','하나','157-2589-413677','2022-02-04');
 CALL register_employee_with_user('test04.dev@company.com','테스트사원04','010-1575-5778','930104-1653427','우리','167-2589-413677','2021-02-04');
 ```
+![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%82%AC%EC%9B%90%20%EB%93%B1%EB%A1%9D.png?raw=true)
   </details>   
    <details>
         <summary> 사원의 이메일이 변경될 시 (트랜잭션 발생)</summary>
@@ -2167,14 +2168,7 @@ CALL register_employee_with_user('test04.dev@company.com','테스트사원04','0
 -- 사원의 이메일이 변경될 시
 CALL update_employee_info(5,'test04_update.dev@company.com','테스트사원05','010-1234-5678',NULL,NULL,NULL,NULL);
 ```
-  </details>   
-   <details>
-        <summary> 사원의 연락처 + 계좌만 변경될 시</summary>
-     
-```sql
--- 사원의 연락처 + 계좌만 변경될 시 (트랜잭션 미발생)
-CALL update_employee_info(2,NULL,NULL,'010-9999-8888',NULL,NULL,'국민은행','123-456-789012');
-```
+![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%82%AC%EC%9B%90%20%EC%A0%95%EB%B3%B4%20%EC%88%98%EC%A0%95.png?raw=true)
   </details>   
    <details>
         <summary> 사원의 휴직 처리</summary>
@@ -2183,6 +2177,7 @@ CALL update_employee_info(2,NULL,NULL,'010-9999-8888',NULL,NULL,'국민은행','
 -- 사원의 휴직 처리
 CALL emp_leave(2,2,'개인 사유로 인한 휴직');
 ```
+![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%ED%9C%B4%EC%A7%81%20%EC%B2%98%EB%A6%AC.png?raw=true)
   </details>   
    <details>
         <summary> 사원의 재직 처리</summary>
@@ -2191,6 +2186,8 @@ CALL emp_leave(2,2,'개인 사유로 인한 휴직');
 -- 사원의 재직 처리
 CALL emp_return(2,2,'휴직 종료 및 복직');
 ```
+![재직처리전](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%9E%AC%EC%A7%81%EC%B2%98%EB%A6%AC%20%EC%A0%84.png?raw=true)
+![재직처리후](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%9E%AC%EC%A7%81%EC%B2%98%EB%A6%AC%20%EC%A0%84.png?raw=true)
   </details>   
    <details>
         <summary> 사원의 퇴직 처리</summary>
@@ -2199,6 +2196,7 @@ CALL emp_return(2,2,'휴직 종료 및 복직');
 -- 사원의 퇴직 처리
 CALL emp_retire(5,2,'정년 퇴직');
 ```
+![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%ED%87%B4%EC%A7%81%20%EC%B2%98%EB%A6%AC.png?raw=true)
   </details>   
    <details>
         <summary> 사원의 부서 배정</summary>
@@ -2208,6 +2206,7 @@ CALL emp_retire(5,2,'정년 퇴직');
 CALL emp_assign_department(1,1,1);
 CALL emp_assign_department(2,1,2);
 ```
+![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EB%B6%80%EC%84%9C%20%EB%B0%B0%EC%A0%95.png?raw=true)
   </details>   
    <details>
         <summary> 사원의 부서 이동</summary>
@@ -2216,6 +2215,7 @@ CALL emp_assign_department(2,1,2);
 -- 사원의 부서 이동
 CALL emp_change_department(2,2,2);
 ```
+![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EB%B6%80%EC%84%9C%20%EC%9D%B4%EB%8F%99.png?raw=true)
   </details>   
    <details>
         <summary> 사원의 직급 배정</summary>
@@ -2226,6 +2226,7 @@ CALL emp_assign_position(1,4,1);
 CALL emp_assign_position(2,2,2);
 CALL emp_assign_position(3,2,2);
 ```
+![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%A7%81%EA%B8%89%20%EB%B0%B0%EC%A0%95.png?raw=true)
   </details>   
    <details>
         <summary> 사원의 승진 처리</summary>
@@ -2234,6 +2235,8 @@ CALL emp_assign_position(3,2,2);
 -- 사원의 승진 처리
 CALL promote_employee(3, 2);
 ```
+![승진이전](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%8A%B9%EC%A7%84%20%EC%9D%B4%EC%A0%84.png?raw=true)
+![승진이후](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%8A%B9%EC%A7%84%20%EC%9D%B4%ED%9B%84.png?raw=true)
 </details>
   </details>
   <details>
