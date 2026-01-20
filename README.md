@@ -948,7 +948,721 @@ DELIMITER ;
   
   <details>
      <summary>📌근태관리 시스템</summary>
-  </details>
+    <details>
+        <summary>출근 기록 등록 </summary>
+
+```sql
+-- 출근 기록 등록
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE check_in (
+    IN p_emp_id BIGINT,
+    IN p_work_type_id BIGINT,
+    IN p_work_date DATE,
+    IN p_check_in_time DATETIME
+)
+BEGIN
+    DECLARE v_start_time TIME;
+    DECLARE v_status_check_in_id BIGINT;
+    DECLARE v_exists BIGINT;
+
+    DECLARE v_errmsg TEXT;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        GET DIAGNOSTICS CONDITION 1 v_errmsg = MESSAGE_TEXT;
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_errmsg;
+    END;
+    
+    START TRANSACTION;
+    
+    SELECT attendance_id INTO v_exists
+    FROM attendance_record
+    WHERE emp_id = p_emp_id AND work_date = p_work_date
+    LIMIT 1;
+
+    IF v_exists IS NOT NULL THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '출근 등록 실패: 이미 해당 날짜의 근태 기록이 존재합니다.';
+    END IF;
+
+    SELECT start_time INTO v_start_time
+    FROM work_type
+    WHERE work_type_id = p_work_type_id;
+
+    IF ROW_COUNT() = 0 THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '출근 등록 실패: 유효하지 않은 work_type_id 입니다.';
+    END IF;
+
+    IF v_start_time IS NULL THEN
+        SELECT status_id INTO v_status_check_in_id
+        FROM attendance_status
+        WHERE status_code = 'NORMAL' AND use_yn='Y';
+    ELSEIF TIME(p_check_in_time) > v_start_time THEN
+        SELECT status_id INTO v_status_check_in_id
+        FROM attendance_status
+        WHERE status_code = 'LATE' AND use_yn='Y';
+    ELSE
+        SELECT status_id INTO v_status_check_in_id
+        FROM attendance_status
+        WHERE status_code = 'NORMAL' AND use_yn='Y';
+    END IF;
+
+    IF v_status_check_in_id IS NULL THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '출근 등록 실패: 근태 상태코드(NORMAL/LATE)가 존재하지 않습니다.';
+    END IF;
+
+    INSERT INTO attendance_record (
+        emp_id, work_type_id, status_check_in, work_date, check_in_time,
+        created_at, updated_at
+    ) VALUES (
+        p_emp_id, p_work_type_id, v_status_check_in_id, p_work_date, p_check_in_time,
+        NOW(), NOW()
+    );
+
+    COMMIT;
+END$$
+DELIMITER ;
+```
+  </details>   
+   <details>
+        <summary> 퇴근 기록 등록</summary>
+     
+```sql
+-- 퇴근 기록 등록
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE check_out (
+    IN p_emp_id BIGINT,
+    IN p_work_date DATE,
+    IN p_check_out_time DATETIME
+)
+BEGIN
+    DECLARE v_attendance_id BIGINT;
+    DECLARE v_work_type_id BIGINT;
+    DECLARE v_end_time TIME;
+    DECLARE v_status_normal_id BIGINT;
+    DECLARE v_status_early_id BIGINT;
+    DECLARE v_check_out_status BIGINT;
+
+    DECLARE v_errmsg TEXT;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        GET DIAGNOSTICS CONDITION 1 v_errmsg   = MESSAGE_TEXT;
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_errmsg;
+    END;
+
+    START TRANSACTION;
+
+    SELECT attendance_id, work_type_id 
+	 INTO v_attendance_id, v_work_type_id
+    FROM attendance_record
+    WHERE emp_id = p_emp_id
+      AND work_date = p_work_date
+    LIMIT 1;
+
+    IF v_attendance_id IS NULL THEN
+   	  ROLLBACK;
+        SIGNAL SQLSTATE '45000' 
+		  		SET MESSAGE_TEXT = '퇴근 등록 실패: 출근 기록이 없습니다.';
+    END IF;
+    
+	 IF (SELECT check_out_time FROM attendance_record WHERE attendance_id = v_attendance_id) IS NOT NULL THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '퇴근 등록 실패: 이미 퇴근 처리되었습니다.';
+    END IF;
+    
+    SELECT end_time INTO v_end_time
+    FROM work_type
+    WHERE work_type_id = v_work_type_id;
+
+    SELECT status_id INTO v_status_normal_id
+    FROM attendance_status
+    WHERE status_code = 'NORMAL' AND use_yn='Y';
+
+    SELECT status_id INTO v_status_early_id
+    FROM attendance_status
+    WHERE status_code = 'EARLY' AND use_yn='Y';
+    
+     IF v_status_normal_id IS NULL OR v_status_early_id IS NULL THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '퇴근 등록 실패: 근태 상태코드(NORMAL/EARLY)가 존재하지 않습니다.';
+    END IF;
+
+    IF v_end_time IS NOT NULL AND TIME(p_check_out_time) < v_end_time THEN
+        SET v_check_out_status = v_status_early_id;
+    ELSE
+        SET v_check_out_status = v_status_normal_id;
+    END IF;
+
+    UPDATE attendance_record
+    SET check_out_time = p_check_out_time,
+        status_check_out = v_check_out_status,
+        updated_at = NOW()
+    WHERE attendance_id = v_attendance_id;
+    
+    COMMIT;
+END$$
+DELIMITER ;
+```
+  </details>   
+   <details>
+        <summary> 결근 기록</summary>
+     
+```sql
+-- 결근 기록
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE attendance_finalize_daily (
+    IN p_work_date DATE
+)
+BEGIN
+    DECLARE v_absent_status_id BIGINT;
+
+    DECLARE v_sqlstate CHAR(5);
+    DECLARE v_errmsg TEXT;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        GET DIAGNOSTICS CONDITION 1
+            v_sqlstate = RETURNED_SQLSTATE,
+            v_errmsg   = MESSAGE_TEXT;
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = v_errmsg;
+    END;
+
+    START TRANSACTION;
+
+    SELECT status_id
+      INTO v_absent_status_id
+      FROM attendance_status
+     WHERE status_code = 'ABSENT'
+       AND use_yn = 'Y';
+
+    INSERT INTO attendance_record (
+        emp_id,
+        work_date,
+        status_check_in,
+        created_at,
+        updated_at
+    )
+    SELECT
+        e.emp_id,
+        p_work_date,
+        v_absent_status_id,
+        CURRENT_TIMESTAMP,
+        CURRENT_TIMESTAMP
+    FROM employee e
+    LEFT JOIN attendance_record ar
+      ON ar.emp_id = e.emp_id
+     AND ar.work_date = p_work_date
+    WHERE ar.attendance_id IS NULL;
+    COMMIT;
+END$$
+DELIMITER ;
+```
+  </details>   
+   <details>
+        <summary> 출퇴근 기록 조회</summary>
+     
+```sql
+-- 출퇴근 기록 조회
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE attendance_record_select(
+    IN p_emp_id BIGINT,
+    IN p_dept_id BIGINT,
+    IN p_start_date DATE,
+    IN p_end_date DATE
+)
+BEGIN
+    IF p_emp_id IS NOT NULL THEN
+        SELECT *
+        FROM attendance_record
+        WHERE emp_id = p_emp_id
+          AND work_date BETWEEN p_start_date AND p_end_date
+        ORDER BY work_date;
+    ELSEIF p_dept_id IS NOT NULL THEN
+        SELECT ar.*
+        FROM attendance_record ar
+        JOIN employee e ON ar.emp_id = e.emp_id
+        WHERE e.dept_id = p_dept_id
+          AND ar.work_date BETWEEN p_start_date AND p_end_date
+        ORDER BY ar.work_date;
+    ELSE
+        SELECT *
+        FROM attendance_record
+        WHERE work_date BETWEEN p_start_date AND p_end_date
+        ORDER BY work_date;
+    END IF;
+END$$
+DELIMITER ;
+```
+  </details>   
+   <details>
+        <summary> 초과근무 신청등록</summary>
+     
+```sql
+-- 초과근무 신청 등록
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE overtime_record_create (
+    IN p_emp_id BIGINT,
+    IN p_work_date DATE,
+    IN p_reason TEXT
+)
+BEGIN
+    DECLARE v_check_in DATETIME;
+    DECLARE v_check_out DATETIME;
+    DECLARE v_extend_minutes INT DEFAULT 0;
+    DECLARE v_night_minutes INT DEFAULT 0;
+    DECLARE v_work_start DATETIME;
+    DECLARE v_work_end DATETIME;
+
+    SELECT check_in_time, check_out_time
+    INTO v_check_in, v_check_out
+    FROM attendance_record
+    WHERE emp_id = p_emp_id
+      AND work_date = p_work_date
+    LIMIT 1;
+
+    IF v_check_in IS NULL OR v_check_out IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '근태 기록이 없거나 퇴근 시간이 기록되지 않았습니다.';
+    END IF;
+
+    IF p_reason IS NULL OR LENGTH(TRIM(p_reason)) = 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'reason은 필수 입력값입니다.';
+    END IF;
+
+    SET v_work_start = DATE_ADD(p_work_date, INTERVAL 18 HOUR);
+    SET v_work_end   = DATE_ADD(p_work_date, INTERVAL 22 HOUR);
+    SET v_extend_minutes = GREATEST(0, TIMESTAMPDIFF(MINUTE, GREATEST(v_check_in, v_work_start), LEAST(v_check_out, v_work_end)));
+
+    SET v_work_start = DATE_ADD(p_work_date, INTERVAL 22 HOUR);
+    SET v_work_end   = DATE_ADD(DATE_ADD(p_work_date, INTERVAL 1 DAY), INTERVAL 6 HOUR);
+    SET v_night_minutes = GREATEST(0, TIMESTAMPDIFF(MINUTE, GREATEST(v_check_in, v_work_start), LEAST(v_check_out, v_work_end)));
+
+    IF v_extend_minutes > 0 THEN
+        INSERT INTO overtime_record (
+            emp_id, work_date, overtime_minutes,
+            reason, approval_status, overtime_type,
+            created_at, updated_at
+        )
+        VALUES (
+            p_emp_id, p_work_date, v_extend_minutes,
+            p_reason, 'PENDING', 'EXTEND',
+            NOW(), NOW()
+        );
+    END IF;
+
+    IF v_night_minutes > 0 THEN
+        INSERT INTO overtime_record (
+            emp_id, work_date, overtime_minutes,
+            reason, approval_status, overtime_type,
+            created_at, updated_at
+        )
+        VALUES (
+            p_emp_id, p_work_date, v_night_minutes,
+            p_reason, 'PENDING', 'NIGHT',
+            NOW(), NOW()
+        );
+    END IF;
+END$$
+DELIMITER ;
+```
+  </details>   
+   <details>
+        <summary> 초과근무 승인</summary>
+     
+```sql
+-- 초과근무 승인 
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE overtime_record_approve (
+    IN p_overtime_id BIGINT,
+    IN p_admin_emp_id BIGINT
+)
+BEGIN
+    UPDATE overtime_record
+    SET approval_status = 'APPROVED',
+        decided_by = p_admin_emp_id,
+        decided_at = NOW(),
+        updated_at = NOW()
+    WHERE overtime_id = p_overtime_id
+      AND approval_status = 'PENDING';
+
+    IF ROW_COUNT() = 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '초과근무 승인 실패: PENDING 상태만 승인할 수 있습니다.';
+    END IF;
+END$$
+DELIMITER ;
+```
+  </details>   
+   <details>
+        <summary> 초과근무 반려</summary>
+     
+```sql
+-- 초과근무 반려
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE overtime_record_reject (
+    IN p_overtime_id BIGINT,
+    IN p_admin_emp_id BIGINT,
+    IN p_reject_reason TEXT
+)
+BEGIN
+    IF p_reject_reason IS NULL OR LENGTH(TRIM(p_reject_reason)) = 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '초과근무 반려 실패: 반려 사유는 필수입니다.';
+    END IF;
+
+    UPDATE overtime_record
+    SET approval_status = 'REJECTED',
+        decided_by = p_admin_emp_id,
+        decided_at = NOW(),
+        reject_reason = p_reject_reason,
+        updated_at = NOW()
+    WHERE overtime_id = p_overtime_id
+      AND approval_status = 'PENDING';
+
+    IF ROW_COUNT() = 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '초과근무 반려 실패: PENDING 상태만 반려할 수 있습니다.';
+    END IF;
+END$$
+DELIMITER ;
+```
+  </details>   
+   <details>
+        <summary> 휴가신청 등록</summary>
+     
+```sql
+-- 휴가 신청 등록
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE leave_request_create (
+    IN p_emp_id BIGINT,
+    IN p_leave_type_id BIGINT,
+    IN p_start_date DATE,
+    IN p_end_date DATE,
+    IN p_reason TEXT,
+    IN p_use_days DECIMAL(3,1)
+)
+BEGIN
+	 DECLARE v_overlap_cnt INT DEFAULT 0;
+
+    IF p_start_date IS NULL OR p_end_date IS NULL OR p_start_date > p_end_date THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '휴가 신청 실패: 시작일/종료일이 올바르지 않습니다.';
+    END IF;
+
+    IF p_use_days IS NULL OR p_use_days <= 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '휴가 신청 실패: use_days는 0보다 커야 합니다.';
+    END IF;
+
+    IF p_reason IS NULL OR LENGTH(TRIM(p_reason)) = 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '휴가 신청 실패: 사유는 필수입니다.';
+    END IF;
+
+    SELECT COUNT(*)
+      INTO v_overlap_cnt
+      FROM leave_request
+     WHERE emp_id = p_emp_id
+       AND approval_status <> 'CANCELED'
+       AND NOT (p_end_date < start_date OR p_start_date > end_date);
+
+    IF v_overlap_cnt > 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '휴가 신청 실패: 기존 휴가 신청 기간과 겹칩니다.';
+    END IF;
+    
+    INSERT INTO leave_request (
+        emp_id, leave_type_id, start_date, end_date,
+        reason, use_days, approval_status,
+        created_at, updated_at
+    ) VALUES (
+        p_emp_id, p_leave_type_id, p_start_date, p_end_date,
+        p_reason, p_use_days, 'PENDING',
+        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+    );
+END$$
+DELIMITER ;
+```
+  </details>   
+   <details>
+        <summary> 휴가신청 취소</summary>
+     
+```sql
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE leave_request_cancel (
+    IN p_leave_request_id BIGINT
+)
+BEGIN
+    UPDATE leave_request
+    SET approval_status = 'CANCELED',
+        updated_at = CURRENT_TIMESTAMP
+    WHERE leave_request_id = p_leave_request_id
+      AND approval_status = 'PENDING';
+
+    IF ROW_COUNT() = 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT =
+            '휴가 취소(INOUT_004) 실패: PENDING 상태인 요청만 취소할 수 있습니다.';
+    END IF;
+END$$
+DELIMITER ;
+```
+  </details>   
+   <details>
+        <summary> 휴가승인</summary>
+     
+```sql
+-- 휴가 승인
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE leave_request_approve (
+    IN p_leave_request_id BIGINT,
+    IN p_admin_emp_id BIGINT
+)
+BEGIN
+    DECLARE v_use_days DECIMAL(3,1);
+    DECLARE v_errmsg TEXT;
+
+    DECLARE EXIT HANDLER FOR NOT FOUND
+    BEGIN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = '휴가 승인 실패: 해당 휴가 신청을 찾을 수 없습니다.';
+    END;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        GET DIAGNOSTICS CONDITION 1 v_errmsg = MESSAGE_TEXT;
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_errmsg;
+    END;
+
+    START TRANSACTION;
+
+    SELECT use_days
+      INTO v_use_days
+      FROM leave_request
+     WHERE leave_request_id = p_leave_request_id;
+
+    UPDATE leave_request
+       SET approval_status = 'APPROVED',
+       	  decided_by = p_admin_emp_id,
+       	  decided_at = NOW(), 
+           updated_at = CURRENT_TIMESTAMP
+     WHERE leave_request_id = p_leave_request_id
+       AND approval_status = 'PENDING';
+
+    IF ROW_COUNT() = 0 THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = '휴가 승인 실패: PENDING 상태만 승인할 수 있습니다.';
+    END IF;
+
+    INSERT INTO leave_history (leave_request_id, use_days)
+    VALUES (p_leave_request_id, v_use_days);
+
+    COMMIT;
+END$$
+DELIMITER ;
+```
+  </details>   
+   <details>
+        <summary> 휴가반려</summary>
+     
+```sql
+-- 휴가 반려
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE leave_request_reject (
+    IN p_leave_request_id BIGINT,
+    IN p_admin_emp_id BIGINT,
+    IN p_reject_reason TEXT
+)
+BEGIN
+    IF p_reject_reason IS NULL OR LENGTH(TRIM(p_reject_reason)) = 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = '휴가 반려 실패: 반려 사유는 필수입니다.';
+    END IF;
+
+    UPDATE leave_request
+       SET approval_status = 'REJECTED',
+           decided_by = p_admin_emp_id,
+           decided_at = NOW(),
+           reject_reason = p_reject_reason,
+           updated_at = CURRENT_TIMESTAMP
+     WHERE leave_request_id = p_leave_request_id
+       AND approval_status = 'PENDING';
+
+    IF ROW_COUNT() = 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = '휴가 반려 실패: PENDING 상태만 반려할 수 있습니다.';
+    END IF;
+END$$
+DELIMITER ;
+```
+  </details>   
+   <details>
+        <summary> 근태 기록 수정</summary>
+     
+```sql
+-- 근태 기록 수정
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE attendance_record_update (
+    IN p_attendance_id BIGINT,
+    IN p_check_in_status_code  VARCHAR(30),
+    IN p_check_out_status_code VARCHAR(30)
+)
+BEGIN
+    DECLARE v_check_in_status_id  BIGINT;
+    DECLARE v_check_out_status_id BIGINT;
+
+    IF p_check_in_status_code IS NULL
+       AND p_check_out_status_code IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = '근태 수정 실패: 변경할 상태가 없습니다.';
+    END IF;
+
+    IF p_check_in_status_code IS NOT NULL THEN
+        SELECT status_id
+        INTO v_check_in_status_id
+        FROM attendance_status
+        WHERE status_code = p_check_in_status_code;
+    END IF;
+
+    IF p_check_out_status_code IS NOT NULL THEN
+        SELECT status_id
+        INTO v_check_out_status_id
+        FROM attendance_status
+        WHERE status_code = p_check_out_status_code;
+    END IF;
+
+    UPDATE attendance_record
+    SET
+        status_check_in  = COALESCE(v_check_in_status_id,  status_check_in),
+        status_check_out = COALESCE(v_check_out_status_id, status_check_out),
+        updated_at = CURRENT_TIMESTAMP
+    WHERE attendance_id = p_attendance_id;
+
+    IF ROW_COUNT() = 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = '근태 수정 실패: 해당 근태 기록을 찾을 수 없습니다.';
+    END IF;
+END$$
+DELIMITER ;
+```
+  </details>   
+   <details>
+        <summary> 개인 근태 이력 조회</summary>
+     
+```sql
+-- 개인 근태 이력 조회
+DELIMITER $$
+CREATE PROCEDURE attendance_record_find_by_emp (
+    IN p_emp_id BIGINT
+)
+BEGIN
+    SELECT
+        e.emp_id,
+        e.`name`,
+        ar.work_date,
+        wt.work_type_name,
+        s_in.status_name  AS check_in_status,
+        ar.check_in_time,
+        s_out.status_name AS check_out_status,
+        ar.check_out_time
+    FROM attendance_record ar
+    JOIN employee e
+      ON ar.emp_id = e.emp_id
+    JOIN work_type wt
+      ON ar.work_type_id = wt.work_type_id
+    LEFT JOIN attendance_status s_in
+      ON ar.status_check_in = s_in.status_id
+    LEFT JOIN attendance_status s_out
+      ON ar.status_check_out = s_out.status_id
+    WHERE ar.emp_id = p_emp_id
+    ORDER BY ar.work_date;
+END$$
+DELIMITER ;
+```
+  </details>   
+   <details>
+        <summary> 특정 부서 사원들의  N 월 근태 기록 조회</summary>
+     
+```sql
+DELIMITER $$
+CREATE PROCEDURE attendance_record_find_by_dept_period (
+    IN p_dept_id BIGINT,
+    IN p_start_date DATE,
+    IN p_end_date DATE
+)
+BEGIN
+    SELECT
+        d.dept_name,
+        e.emp_id,
+        e.`name`,
+        ar.work_date,
+        s_in.status_name AS check_in_status
+    FROM attendance_record ar
+    JOIN employee e
+      ON ar.emp_id = e.emp_id
+    LEFT JOIN department d
+      ON e.dept_id = d.dept_id
+    LEFT JOIN attendance_status s_in
+      ON ar.status_check_in = s_in.status_id
+    WHERE e.dept_id = p_dept_id
+      AND ar.work_date BETWEEN p_start_date AND p_end_date
+    ORDER BY e.emp_id, ar.work_date;
+END$$
+DELIMITER ;
+
+
+-- 부서 근태 통계
+DELIMITER $$
+CREATE PROCEDURE attendance_stats_by_dept (
+    IN p_start_date DATE,
+    IN p_end_date   DATE
+)
+BEGIN
+    SELECT
+        d.dept_name,
+        
+        /* 출근 기준 */
+        SUM(CASE WHEN s_in.status_code = 'NORMAL' THEN 1 ELSE 0 END) AS 정상출근,
+        SUM(CASE WHEN s_in.status_code = 'LATE'   THEN 1 ELSE 0 END) AS 지각,
+        SUM(CASE WHEN s_in.status_code = 'ABSENT' THEN 1 ELSE 0 END) AS 결근,
+
+        /* 퇴근 기준 */
+        SUM(CASE WHEN s_out.status_code = 'NORMAL' THEN 1 ELSE 0 END) AS 정상퇴근,
+        SUM(CASE WHEN s_out.status_code = 'EARLY'  THEN 1 ELSE 0 END) AS 조퇴,
+        SUM(CASE WHEN ar.status_check_out IS NULL  THEN 1 ELSE 0 END) AS 퇴근미기록,
+
+        COUNT(*) AS 총근태일수
+    FROM attendance_record ar
+    JOIN employee e ON ar.emp_id = e.emp_id
+    LEFT JOIN department d ON e.dept_id = d.dept_id
+    LEFT JOIN attendance_status s_in
+           ON ar.status_check_in = s_in.status_id
+    LEFT JOIN attendance_status s_out
+           ON ar.status_check_out = s_out.status_id
+    WHERE ar.work_date BETWEEN p_start_date AND p_end_date
+    GROUP BY d.dept_id, d.dept_name
+    ORDER BY d.dept_name;
+END$$
+DELIMITER ;
+```
+  </details>     
+   </details>
   <details>
     <summary>📌 급여관리 시스템</summary>
    <details>
@@ -1434,6 +2148,93 @@ DELIMITER ;
   <summary>📌핵심 기능 테스트</summary>
   <details>
      <summary>📌인사관리 시스템</summary>
+   <details>
+        <summary> 사원등록</summary>
+
+```sql
+-- 사원등록
+CALL register_employee_with_user('admin01.dev@company.com','인사담당자01','010-2345-5678','850814-1358901','신한','317-6688-415622','2021-02-05');
+CALL register_employee_with_user('test01.dev@company.com','테스트사원01','010-1275-5378','960105-1653427','국민','127-2589-413677','2024-02-04');
+CALL register_employee_with_user('test02.dev@company.com','테스트사원02','010-1375-5778','950104-1653427','농협','137-2589-413677','2023-02-04');
+CALL register_employee_with_user('test03.dev@company.com','테스트사원03','010-1475-5778','940104-1653427','하나','157-2589-413677','2022-02-04');
+CALL register_employee_with_user('test04.dev@company.com','테스트사원04','010-1575-5778','930104-1653427','우리','167-2589-413677','2021-02-04');
+```
+  </details>   
+   <details>
+        <summary> 사원의 이메일이 변경될 시 (트랜잭션 발생)</summary>
+     
+```sql
+-- 사원의 이메일이 변경될 시
+CALL update_employee_info(5,'test04_update.dev@company.com','테스트사원05','010-1234-5678',NULL,NULL,NULL,NULL);
+```
+  </details>   
+   <details>
+        <summary> 사원의 연락처 + 계좌만 변경될 시</summary>
+     
+```sql
+-- 사원의 연락처 + 계좌만 변경될 시 (트랜잭션 미발생)
+CALL update_employee_info(2,NULL,NULL,'010-9999-8888',NULL,NULL,'국민은행','123-456-789012');
+```
+  </details>   
+   <details>
+        <summary> ?</summary>
+     
+```sql
+-- ?
+CALL emp_leave(2,2,'개인 사유로 인한 휴직');
+```
+  </details>   
+   <details>
+        <summary> ?</summary>
+     
+```sql
+-- ?
+CALL emp_return(2,2,'휴직 종료 및 복직');
+```
+  </details>   
+   <details>
+        <summary> ?</summary>
+     
+```sql
+-- ?
+CALL emp_retire(5,2,'정년 퇴직');
+```
+  </details>   
+   <details>
+        <summary> ?</summary>
+     
+```sql
+-- ?
+CALL emp_assign_department(1,1,1);
+CALL emp_assign_department(2,1,2);
+```
+  </details>   
+   <details>
+        <summary> ?</summary>
+     
+```sql
+-- ?
+CALL emp_change_department(2,2,2);
+```
+  </details>   
+   <details>
+        <summary> ?</summary>
+     
+```sql
+-- ?
+CALL emp_assign_position(1,4,1);
+CALL emp_assign_position(2,2,2);
+CALL emp_assign_position(3,2,2);
+```
+  </details>   
+   <details>
+        <summary> ?</summary>
+     
+```sql
+-- ?
+CALL promote_employee(3, 2);
+```
+</details>
   </details>
   <details>
      <summary>📌근태관리 시스템</summary>
