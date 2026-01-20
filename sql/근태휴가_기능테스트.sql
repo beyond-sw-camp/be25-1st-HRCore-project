@@ -550,6 +550,8 @@ CALL overtime_record_reject(3, 1, '사전 신청 누락');
 
 
 -- 휴가 신청 등록 (요구사항 코드 : INOUT_004)
+DROP PROCEDURE IF EXISTS leave_request_create;
+
 DELIMITER $$
 CREATE OR REPLACE PROCEDURE leave_request_create (
     IN p_emp_id BIGINT,
@@ -560,6 +562,36 @@ CREATE OR REPLACE PROCEDURE leave_request_create (
     IN p_use_days DECIMAL(3,1)
 )
 BEGIN
+	 DECLARE v_overlap_cnt INT DEFAULT 0;
+
+    IF p_start_date IS NULL OR p_end_date IS NULL OR p_start_date > p_end_date THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '휴가 신청 실패: 시작일/종료일이 올바르지 않습니다.';
+    END IF;
+
+    IF p_use_days IS NULL OR p_use_days <= 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '휴가 신청 실패: use_days는 0보다 커야 합니다.';
+    END IF;
+
+    IF p_reason IS NULL OR LENGTH(TRIM(p_reason)) = 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '휴가 신청 실패: 사유는 필수입니다.';
+    END IF;
+
+    -- 같은 사원 기존 휴가와 기간 겹침 체크 (취소 제외)
+    SELECT COUNT(*)
+      INTO v_overlap_cnt
+      FROM leave_request
+     WHERE emp_id = p_emp_id
+       AND approval_status <> 'CANCELED'
+       AND NOT (p_end_date < start_date OR p_start_date > end_date);
+
+    IF v_overlap_cnt > 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '휴가 신청 실패: 기존 휴가 신청 기간과 겹칩니다.';
+    END IF;
+    
     INSERT INTO leave_request (
         emp_id, leave_type_id, start_date, end_date,
         reason, use_days, approval_status,
