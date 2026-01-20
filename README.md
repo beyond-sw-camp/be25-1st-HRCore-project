@@ -40,6 +40,8 @@
 
 이를 통해 본 프로젝트는 단순한 인사 정보 관리 수준을 넘어, 중소기업 환경에 적합한 통합 HR 관리 시스템 설계 모델을 제시하고 향후 종합 HR 그룹웨어로 발전할 수 있는 기반을 마련하고자 한다.
 
+
+
 ## 📊 WBS
 ![WBS](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/WBS.png?raw=true)
 
@@ -61,14 +63,45 @@
    </details>
    
    <details>
-     <summary>📌근태관리 시스템</summary>
+     <summary>📌 근태관리 시스템</summary>
       <details>
-       <summary>[attendance_record]</summary>
-       <br>
-       <img src="https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%ED%85%8C%EC%9D%B4%EB%B8%94%20%EC%BA%A1%EC%B3%90/attendance_record.png?raw=true" width="600px"/>
+        <summary>attendnce_record</summary>
+        
+```sql
+ CREATE TABLE attendance_record (
+  attendance_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  emp_id BIGINT NOT NULL,
+  work_type_id BIGINT,
+  status_check_in BIGINT,
+  status_check_out BIGINT,
+  work_date DATE NOT NULL,
+  check_in_time DATETIME,
+  check_out_time DATETIME,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (emp_id) REFERENCES employee(emp_id),
+  FOREIGN KEY (work_type_id) REFERENCES work_type(work_type_id),
+  FOREIGN KEY (status_check_in) REFERENCES attendance_status(status_id),
+  FOREIGN KEY (status_check_out) REFERENCES attendance_status(status_id),
+  UNIQUE (emp_id, work_date)
+  );
+```
+  </details>   
+  <details>
+        <summary>attendnce_status</summary>
+        
+```sql
+CREATE TABLE attendance_status (
+    status_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    status_code VARCHAR(20) NOT NULL UNIQUE,
+    status_name VARCHAR(50) NOT NULL,
+    use_yn CHAR(1) NOT NULL DEFAULT 'Y' CHECK (use_yn IN ('Y','N')),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+```
+  </details>   
       </details>
-  </details>
-   
    <details>
      <summary>📌급여관리 시스템</summary>
      </details>
