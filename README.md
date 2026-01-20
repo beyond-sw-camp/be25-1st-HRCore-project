@@ -2177,61 +2177,61 @@ CALL update_employee_info(2,NULL,NULL,'010-9999-8888',NULL,NULL,'국민은행','
 ```
   </details>   
    <details>
-        <summary> ?</summary>
+        <summary> 사원의 휴직 처리</summary>
      
 ```sql
--- ?
+-- 사원의 휴직 처리
 CALL emp_leave(2,2,'개인 사유로 인한 휴직');
 ```
   </details>   
    <details>
-        <summary> ?</summary>
+        <summary> 사원의 재직 처리</summary>
      
 ```sql
--- ?
+-- 사원의 재직 처리
 CALL emp_return(2,2,'휴직 종료 및 복직');
 ```
   </details>   
    <details>
-        <summary> ?</summary>
+        <summary> 사원의 퇴직 처리</summary>
      
 ```sql
--- ?
+-- 사원의 퇴직 처리
 CALL emp_retire(5,2,'정년 퇴직');
 ```
   </details>   
    <details>
-        <summary> ?</summary>
+        <summary> 사원의 부서 배정</summary>
      
 ```sql
--- ?
+-- 사원의 부서 배정
 CALL emp_assign_department(1,1,1);
 CALL emp_assign_department(2,1,2);
 ```
   </details>   
    <details>
-        <summary> ?</summary>
+        <summary> 사원의 부서 이동</summary>
      
 ```sql
--- ?
+-- 사원의 부서 이동
 CALL emp_change_department(2,2,2);
 ```
   </details>   
    <details>
-        <summary> ?</summary>
+        <summary> 사원의 직급 배정</summary>
      
 ```sql
--- ?
+-- 사원의 직급 배정
 CALL emp_assign_position(1,4,1);
 CALL emp_assign_position(2,2,2);
 CALL emp_assign_position(3,2,2);
 ```
   </details>   
    <details>
-        <summary> ?</summary>
+        <summary> 사원의 승진 처리</summary>
      
 ```sql
--- ?
+-- 사원의 승진 처리
 CALL promote_employee(3, 2);
 ```
 </details>
