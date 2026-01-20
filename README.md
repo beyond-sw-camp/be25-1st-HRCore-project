@@ -40,6 +40,8 @@
 
 이를 통해 본 프로젝트는 단순한 인사 정보 관리 수준을 넘어, 중소기업 환경에 적합한 통합 HR 관리 시스템 설계 모델을 제시하고 향후 종합 HR 그룹웨어로 발전할 수 있는 기반을 마련하고자 한다.
 
+
+
 ## 📊 WBS
 ![WBS](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/WBS.png?raw=true)
 
@@ -59,9 +61,185 @@
    <details>
      <summary>📌인사관리 시스템</summary>
    </details>
+   
    <details>
-     <summary>📌근태관리 시스템</summary>
-     </details>
+     <summary>📌 근태관리 시스템</summary>
+      <details>
+        <summary>attendnce_record</summary>
+        
+```sql
+ CREATE TABLE attendance_record (
+  attendance_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  emp_id BIGINT NOT NULL,
+  work_type_id BIGINT,
+  status_check_in BIGINT,
+  status_check_out BIGINT,
+  work_date DATE NOT NULL,
+  check_in_time DATETIME,
+  check_out_time DATETIME,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (emp_id) REFERENCES employee(emp_id),
+  FOREIGN KEY (work_type_id) REFERENCES work_type(work_type_id),
+  FOREIGN KEY (status_check_in) REFERENCES attendance_status(status_id),
+  FOREIGN KEY (status_check_out) REFERENCES attendance_status(status_id),
+  UNIQUE (emp_id, work_date)
+  );
+```
+  </details>   
+  <details>
+        <summary>attendnce_status</summary>
+        
+```sql
+CREATE TABLE attendance_status (
+    status_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    status_code VARCHAR(20) NOT NULL UNIQUE,
+    status_name VARCHAR(50) NOT NULL,
+    use_yn CHAR(1) NOT NULL DEFAULT 'Y' CHECK (use_yn IN ('Y','N')),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+```
+  </details>   
+<details>
+        <summary>work_type</summary>
+        
+```sql
+CREATE TABLE work_type (
+    work_type_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    work_type_code VARCHAR(20) NOT NULL UNIQUE,
+    work_type_name VARCHAR(50) NOT NULL,
+    start_time TIME,
+    end_time TIME,
+    use_yn CHAR(1) NOT NULL DEFAULT 'Y' CHECK (use_yn IN ('Y','N')),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+```
+  </details>   
+
+<details>
+        <summary>overtime_record</summary>
+        
+```sql
+CREATE TABLE overtime_record (
+    overtime_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    emp_id BIGINT NOT NULL,
+    work_date DATE NOT NULL,
+    overtime_minutes INT CHECK (overtime_minutes >= 0),
+    reason TEXT,
+    reject_reason TEXT,
+    approval_status ENUM('PENDING','APPROVED','REJECTED') NOT NULL DEFAULT 'PENDING',
+    approved_by BIGINT NULL,
+	 approved_at DATETIME NULL,
+	 rejected_by BIGINT NULL,
+    rejected_at DATETIME NULL,
+    overtime_type VARCHAR(20),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (emp_id) REFERENCES employee(emp_id),
+    CHECK (
+      (approval_status = 'PENDING'  AND approved_at IS NULL AND rejected_at IS NULL)
+      OR
+      (approval_status = 'APPROVED' AND approved_at IS NOT NULL AND rejected_at IS NULL)
+      OR
+      (approval_status = 'REJECTED' AND rejected_at IS NOT NULL AND approved_at IS NULL)
+    )
+);
+```
+  </details>  
+<details>
+        <summary>leave_type</summary>
+        
+```sql
+CREATE TABLE leave_type (
+    leave_type_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    leave_type_name VARCHAR(50) NOT NULL UNIQUE,
+    annual_max_days INT CHECK (annual_max_days >= 0),
+    use_yn CHAR(1) NOT NULL DEFAULT 'Y' CHECK (use_yn IN ('Y','N')),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+```
+  </details>
+<details>
+        <summary>leave_history</summary>
+        
+```sql
+CREATE TABLE leave_history (
+    leave_history_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    leave_request_id BIGINT NOT NULL UNIQUE,
+    use_days DECIMAL(3,1) CHECK (use_days >= 0),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (leave_request_id) REFERENCES leave_request(leave_request_id)
+);
+```
+  </details>
+  <details>
+        <summary>leave_history</summary>
+        
+```sql
+CREATE TABLE leave_history (
+    leave_history_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    leave_request_id BIGINT NOT NULL UNIQUE,
+    use_days DECIMAL(3,1) CHECK (use_days >= 0),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (leave_request_id) REFERENCES leave_request(leave_request_id)
+);
+```
+  </details>
+  <details>
+        <summary>leave_request</summary>
+        
+```sql
+CREATE TABLE leave_request (
+    leave_request_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    emp_id BIGINT NOT NULL,
+    leave_type_id BIGINT NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    reason TEXT,
+    reject_reason TEXT, 
+    use_days DECIMAL(3,1) CHECK (use_days >= 0),
+    approval_status ENUM('PENDING','APPROVED','REJECTED') NOT NULL DEFAULT 'PENDING',
+    approved_by BIGINT NULL,
+    approved_at DATETIME NULL,
+    rejected_by BIGINT NULL,
+    rejected_at DATETIME NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (emp_id) REFERENCES employee(emp_id),
+    FOREIGN KEY (leave_type_id) REFERENCES leave_type(leave_type_id),
+    -- 승인/반려가 동시에 들어가면 안 됨(가능하면 DB에서 방지)
+    CHECK (
+      (approval_status = 'PENDING'  AND approved_at IS NULL AND rejected_at IS NULL)
+      OR
+      (approval_status = 'APPROVED' AND approved_at IS NOT NULL AND rejected_at IS NULL)
+      OR
+      (approval_status = 'REJECTED' AND rejected_at IS NOT NULL AND approved_at IS NULL)
+    )
+);
+```
+  </details>
+  <details>
+        <summary>leave_annual_policy</summary>
+        
+```sql
+CREATE TABLE leave_annual_policy (
+    leave_annual_policy_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    leave_type_id BIGINT NOT NULL REFERENCES leave_type(leave_type_id),       
+    min_years INT NOT NULL,              
+    max_years INT NOT NULL,              
+    annual_max_days INT NOT NULL,        
+    use_yn CHAR(1) NOT NULL DEFAULT 'Y',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP  
+);
+```
+  </details>
+      </details>
    <details>
      <summary>📌급여관리 시스템</summary>
      </details>
