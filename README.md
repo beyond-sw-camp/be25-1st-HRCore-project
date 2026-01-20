@@ -2255,22 +2255,25 @@ CALL pay_item_create('ABSENCE_DEDUCT','결근 공제','DEDUCT','RATE',5.0,'N');
 CALL pay_item_create('OVERTIME_EXTEND','연장근무 수당','EARN','RULE',NULL,'Y');
 CALL pay_item_create('OVERTIME_NIGHT','야간근무 수당','EARN','RULE',NULL,'Y');
 ```
+![급여 항목 등록](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B8%89%EC%97%AC%20%ED%85%8C%EC%8A%A4%ED%8A%B8/%EA%B8%89%EC%97%AC%20%ED%95%AD%EB%AA%A9%20%EB%93%B1%EB%A1%9D%20%EC%8B%A4%ED%96%89%20%EA%B2%B0%EA%B3%BC.png?raw=true)
   </details>   
    <details>
-        <summary> 산재보험 요율 변경</summary>
+        <summary> 급여항목 요율 변경</summary>
      
 ```sql
--- 산재보험 요율 변경
+-- 급여항목 요율 변경
 CALL pay_item_update_value('INDUSTRIAL_ACCIDENT_INSURANCE',1.25);
 ```
+![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B8%89%EC%97%AC%20%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%82%B0%EC%9E%AC%EB%B3%B4%ED%97%98%20%EC%9A%94%EC%9C%A8%20%EB%B3%80%EA%B2%BD%20%EC%8B%A4%ED%96%89%20%EA%B2%B0%EA%B3%BC.png?raw=true)
   </details>   
    <details>
         <summary> 산재보험 활성화 상태 변경</summary>
      
 ```sql
--- 산재보험 활성화 상태 변경
+-- 급여항목 활성화 상태 변경
 CALL pay_item_toggle_use('INDUSTRIAL_ACCIDENT_INSURANCE','Y');
 ```
+![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B8%89%EC%97%AC%20%ED%85%8C%EC%8A%A4%ED%8A%B8/%EA%B8%89%EC%97%AC%20%ED%95%AD%EB%AA%A9%20%ED%99%9C%EC%84%B1%ED%99%94%20%EC%8B%A4%ED%96%89%20%EA%B2%B0%EA%B3%BC.png?raw=true)
  </details>   
    <details>
         <summary> 급여 명세서 생성 </summary>
@@ -2279,6 +2282,7 @@ CALL pay_item_toggle_use('INDUSTRIAL_ACCIDENT_INSURANCE','Y');
 -- 급여 명세서 생성
 CALL payslip_create(3, '2026-01');
 ```
+![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B8%89%EC%97%AC%20%ED%85%8C%EC%8A%A4%ED%8A%B8/%EA%B8%89%EC%97%AC%20%EB%AA%85%EC%84%B8%EC%84%9C%20%EC%83%9D%EC%84%B1%20%EC%8B%A4%ED%96%89%20%EA%B2%B0%EA%B3%BC.png?raw=true)
   </details>   
    <details>
         <summary> 급여 명세서 확정 </summary>
@@ -2287,6 +2291,7 @@ CALL payslip_create(3, '2026-01');
 -- 급여 명세서 확정
 CALL payslip_confirm(10);
 ```
+![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B8%89%EC%97%AC%20%ED%85%8C%EC%8A%A4%ED%8A%B8/%EA%B8%89%EC%97%AC%20%EB%AA%85%EC%84%B8%EC%84%9C%20%ED%99%95%EC%A0%95%20%EC%8B%A4%ED%96%89%20%EA%B2%B0%EA%B3%BC.png?raw=true)
   </details>   
    <details>
         <summary> 급여 명세서 조회 </summary>
@@ -2295,6 +2300,8 @@ CALL payslip_confirm(10);
 -- 급여 명세서 조회
 CALL payslip_view_admin(10);
 ```
+![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B8%89%EC%97%AC%20%ED%85%8C%EC%8A%A4%ED%8A%B8/%EA%B8%89%EC%97%AC%20%EB%AA%85%EC%84%B8%EC%86%8C%20%EC%A1%B0%ED%9A%8C%20%EC%8B%A4%ED%96%89%20%EA%B2%B0%EA%B3%BC1.png?raw=true)
+![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B8%89%EC%97%AC%20%ED%85%8C%EC%8A%A4%ED%8A%B8/%EA%B8%89%EC%97%AC%20%EB%AA%85%EC%84%B8%EC%84%9C%20%EC%A1%B0%ED%9A%8C%20%EC%8B%A4%ED%96%89%20%EA%B2%B0%EA%B3%BC2.png?raw=true)
   </details>   
    <details>
         <summary> 본인용 급여 명세서</summary>
@@ -2303,6 +2310,7 @@ CALL payslip_view_admin(10);
 -- 본인용 급여 명세서
 CALL payslip_view_self(1, 1, '850814');
 ```
+![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B8%89%EC%97%AC%20%ED%85%8C%EC%8A%A4%ED%8A%B8/%EB%B3%B8%EC%9D%B8%EC%9A%A9%20%EA%B8%89%EC%97%AC%20%EB%AA%85%EC%84%B8%EC%84%9C%20%EC%8B%A4%ED%96%89%20%EA%B2%B0%EA%B3%BC.png?raw=true)
   </details>     
    </details>
   
