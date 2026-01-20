@@ -1,5 +1,8 @@
 
 # HRCore_project📝
+<p align="center">
+  <img src="https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/WDQlogo.png?raw=true" width="500px">
+</p>
 
 ## 📌목차
 1. 팀원 소개
