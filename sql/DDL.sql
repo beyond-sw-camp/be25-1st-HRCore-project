@@ -163,7 +163,7 @@ CREATE TABLE overtime_record (
     reject_reason TEXT,
     approval_status ENUM('PENDING','APPROVED','REJECTED') NOT NULL DEFAULT 'PENDING',
     overtime_type VARCHAR(20),
-    created_by BIGINT ,
+    decided_by BIGINT ,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (emp_id) REFERENCES employee(emp_id),
