@@ -9,16 +9,10 @@ CALL pay_item_create('OVERTIME_EXTEND','연장근무 수당','EARN','RULE',NULL,
 CALL pay_item_create('OVERTIME_NIGHT','야간근무 수당','EARN','RULE',NULL,'Y');
 
 -- 산재보험 요율 변경
-CALL pay_item_update_value(
-    'INDUSTRIAL_ACCIDENT_INSURANCE',
-    1.25
-);
+CALL pay_item_update_value('INDUSTRIAL_ACCIDENT_INSURANCE',1.25);
 
 -- 산재보험 활성화 상태 변경
-CALL pay_item_toggle_use(
-    'INDUSTRIAL_ACCIDENT_INSURANCE',
-    'Y'
-);
+CALL pay_item_toggle_use('INDUSTRIAL_ACCIDENT_INSURANCE','Y');
 
 -- 급여 명세서 생성
 CALL payslip_create(3, '2026-01');

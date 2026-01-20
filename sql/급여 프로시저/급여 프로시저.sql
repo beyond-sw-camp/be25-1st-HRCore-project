@@ -1,9 +1,10 @@
+-- 급여 항목 등록
 DELIMITER $$
 CREATE PROCEDURE pay_item_create (
     IN p_pay_item_code VARCHAR(30),
     IN p_pay_item_name VARCHAR(100),
-    IN p_item_type VARCHAR(10),   -- EARN / DEDUCT
-    IN p_calc_type VARCHAR(10),   -- FIX / RATE / RULE
+    IN p_item_type VARCHAR(10),   
+    IN p_calc_type VARCHAR(10),  
     IN p_calc_value DECIMAL(10,2),
     IN p_tax_yn CHAR(1)
 )
@@ -26,6 +27,7 @@ BEGIN
 END$$
 DELIMITER ;
 
+-- 급여 항목 기준값 수정
 DELIMITER $$
 CREATE PROCEDURE pay_item_update_value (
     IN p_pay_item_code VARCHAR(30),
@@ -40,10 +42,11 @@ BEGIN
 END$$
 DELIMITER ;
 
+-- 급여 항목 활성화 상태 변경
 DELIMITER $$
 CREATE PROCEDURE pay_item_toggle_use (
     IN p_pay_item_code VARCHAR(30),
-    IN p_use_yn CHAR(1)   -- Y: 활성 / N: 비활성
+    IN p_use_yn CHAR(1)  
 )
 BEGIN
     UPDATE pay_item
@@ -53,10 +56,11 @@ BEGIN
 END$$
 DELIMITER ;
 
+-- 급여 명세서 생성
 DELIMITER $$
 CREATE OR REPLACE PROCEDURE payslip_create (
     IN p_emp_id BIGINT,
-    IN p_pay_ym CHAR(7)   -- 'YYYY-MM'
+    IN p_pay_ym CHAR(7)  
 )
 BEGIN
     DECLARE v_payslip_id BIGINT;
@@ -72,7 +76,7 @@ BEGIN
     DECLARE v_extend_item_id BIGINT;
     DECLARE v_night_item_id BIGINT;
 
-    -- 예외 발생 시 롤백
+    
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         ROLLBACK;
@@ -81,7 +85,7 @@ BEGIN
 
     START TRANSACTION;
 
-    -- 재직 여부 확인
+    
     IF NOT EXISTS (
         SELECT 1
         FROM employee
@@ -92,7 +96,7 @@ BEGIN
         SET MESSAGE_TEXT = '재직 중인 사원만 급여 명세서를 생성할 수 있습니다.';
     END IF;
 
-    -- 중복 payslip 체크
+    
     IF EXISTS (
         SELECT 1
         FROM payslip
@@ -103,7 +107,7 @@ BEGIN
         SET MESSAGE_TEXT = '이미 생성된 급여 명세서가 있습니다.';
     END IF;
 
-    -- 기본급 조회
+    
     SELECT jp.base_salary
     INTO v_base_salary
     FROM employee e
@@ -111,15 +115,15 @@ BEGIN
       ON e.position_id = jp.position_id
     WHERE e.emp_id = p_emp_id;
 
-    -- 시간당 단가 계산 (월 209시간 기준)
+    
     SET v_hourly_rate = v_base_salary / 209;
 
-    -- payslip 생성
+    
     INSERT INTO payslip (emp_id, pay_ym, status)
     VALUES (p_emp_id, p_pay_ym, 'CREATED');
     SET v_payslip_id = LAST_INSERT_ID();
 
-    -- 기본급 항목 삽입
+    
     INSERT INTO payslip_item (payslip_id, pay_item_id, amount)
     SELECT v_payslip_id, pi.pay_item_id, v_base_salary
     FROM pay_item pi
@@ -127,7 +131,7 @@ BEGIN
       AND pi.use_yn = 'Y';
     SET v_total_pay = v_base_salary;
 
-    -- 연장근무/야간근무 pay_item_id 조회
+   
     SELECT pay_item_id INTO v_extend_item_id
     FROM pay_item
     WHERE pay_item_code = 'OVERTIME_EXTEND'
@@ -140,7 +144,7 @@ BEGIN
       AND use_yn = 'Y'
     LIMIT 1;
 
-    -- ==== 연장근무 건별 삽입 ====
+ 
     INSERT INTO payslip_item (payslip_id, pay_item_id, amount)
     SELECT
         v_payslip_id, v_extend_item_id,
@@ -151,7 +155,7 @@ BEGIN
       AND approval_status = 'APPROVED'
       AND overtime_type = 'EXTEND';
 
-    -- 연장근무 총액 합산
+
     SET v_total_pay = v_total_pay + IFNULL((
         SELECT SUM(ROUND(v_hourly_rate * 1.5 * overtime_minutes / 60, 0))
         FROM overtime_record
@@ -161,7 +165,7 @@ BEGIN
           AND overtime_type = 'EXTEND'
     ), 0);
 
-    -- 야간근무 건별 삽입
+   
     INSERT INTO payslip_item (payslip_id, pay_item_id, amount)
     SELECT
         v_payslip_id, v_night_item_id,
@@ -172,7 +176,7 @@ BEGIN
       AND approval_status = 'APPROVED'
       AND overtime_type = 'NIGHT';
 
-    -- 야간근무 총액 합산
+   
     SET v_total_pay = v_total_pay + IFNULL((
         SELECT SUM(ROUND(v_hourly_rate * 2 * overtime_minutes / 60, 0))
         FROM overtime_record
@@ -182,7 +186,7 @@ BEGIN
           AND overtime_type = 'NIGHT'
     ), 0);
 
-    -- 4대보험 공제 계산
+   
     INSERT INTO payslip_item (payslip_id, pay_item_id, amount)
     SELECT v_payslip_id, pi.pay_item_id, ROUND(v_base_salary * pi.calc_value / 100, 0)
     FROM pay_item pi
@@ -191,7 +195,7 @@ BEGIN
       AND pi.pay_item_code != 'ABSENCE_DEDUCT'
       AND pi.use_yn = 'Y';
 
-    -- 결근/지각/조퇴 집계
+    
     SELECT
         SUM(CASE WHEN s_in.status_code = 'ABSENT' OR s_out.status_code = 'ABSENT' THEN 1 ELSE 0 END),
         SUM(CASE WHEN s_in.status_code = 'LATE' THEN 1 ELSE 0 END),
@@ -205,7 +209,7 @@ BEGIN
 
     SET v_total_absence = v_absence_count + FLOOR((v_late_count + v_early_count)/2);
 
-    -- 결근 공제 pay_item_id 조회
+
     SELECT pay_item_id
     INTO v_absence_item_id
     FROM pay_item
@@ -218,14 +222,14 @@ BEGIN
         VALUES (v_payslip_id, v_absence_item_id, ROUND(v_base_salary * 0.05 * v_total_absence, 0));
     END IF;
 
-    -- 총 공제액 계산
+  
     SELECT IFNULL(SUM(amount), 0)
     INTO v_total_deduct
     FROM payslip_item
     WHERE payslip_id = v_payslip_id
       AND pay_item_id IN (SELECT pay_item_id FROM pay_item WHERE item_type='DEDUCT');
 
-    -- payslip 금액 확정
+   
     UPDATE payslip
     SET total_pay    = v_total_pay,
         total_deduct = v_total_deduct,
@@ -233,7 +237,7 @@ BEGIN
         updated_at   = CURRENT_TIMESTAMP
     WHERE payslip_id = v_payslip_id;
 
-    -- 급여 명세 접근 정보 생성
+    
     INSERT INTO payslip_access (payslip_id, failed_count)
     VALUES (v_payslip_id, 0);
 
@@ -241,6 +245,7 @@ BEGIN
 END$$
 DELIMITER ;
 
+-- 급여 명세서 확정
 DELIMITER $$
 CREATE OR REPLACE PROCEDURE payslip_confirm (
     IN p_payslip_id BIGINT
@@ -248,25 +253,25 @@ CREATE OR REPLACE PROCEDURE payslip_confirm (
 BEGIN
     DECLARE v_status VARCHAR(20);
 
-    -- 현재 상태 확인
+ 
     SELECT status
       INTO v_status
       FROM payslip
      WHERE payslip_id = p_payslip_id;
 
-    -- 존재 여부 체크
+  
     IF v_status IS NULL THEN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = '존재하지 않는 급여 명세서입니다.';
     END IF;
 
-    -- 이미 확정된 경우
+ 
     IF v_status = 'CONFIRMED' THEN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = '이미 확정된 급여 명세서입니다.';
     END IF;
 
-    -- 급여 확정 처리
+
     UPDATE payslip
        SET status = 'CONFIRMED',
            confirmed_at = CURRENT_TIMESTAMP
@@ -274,13 +279,13 @@ BEGIN
 END $$
 DELIMITER ;
 
-
+-- 급여 명세서 조회
 DELIMITER $$
 CREATE OR REPLACE PROCEDURE payslip_view_admin (
     IN p_payslip_id BIGINT
 )
 BEGIN
-    -- 확정 여부 확인
+  
     IF NOT EXISTS (
         SELECT 1
         FROM payslip
@@ -291,7 +296,7 @@ BEGIN
         SET MESSAGE_TEXT = '확정된 급여 명세서만 조회할 수 있습니다';
     END IF;
 
-    -- 급여 명세서 요약
+    
     SELECT
         p.payslip_id,
         p.emp_id,
@@ -308,7 +313,7 @@ BEGIN
     JOIN department d ON e.dept_id = d.dept_id
     WHERE p.payslip_id = p_payslip_id;
 
-    -- 급여 항목
+  
     SELECT
         pi.pay_item_id,
         pit.pay_item_name,
@@ -320,6 +325,8 @@ BEGIN
     ORDER BY pit.item_type DESC, pi.pay_item_id ASC;
 END$$
 DELIMITER ;
+
+-- 본인용 급여 명세서
 
 DELIMITER $$
 CREATE OR REPLACE PROCEDURE payslip_view_self (
@@ -340,7 +347,7 @@ BEGIN
 
     START TRANSACTION;
 
-    -- 본인 + 확정 명세서 검증
+    
     IF NOT EXISTS (
         SELECT 1
         FROM payslip
@@ -352,32 +359,32 @@ BEGIN
         SET MESSAGE_TEXT = '본인의 확정된 급여 명세서만 조회할 수 있습니다';
     END IF;
 
-    -- payslip_access 레코드 보장
+   
     INSERT INTO payslip_access (payslip_id)
     VALUES (p_payslip_id)
     ON DUPLICATE KEY UPDATE
         updated_at = CURRENT_TIMESTAMP;
 
-    -- 사원 생년월일 조회
+   
     SELECT SUBSTRING(jumin, 1, 6)
     INTO v_birth_pwd_db
     FROM employee
     WHERE emp_id = p_emp_id;
 
-    -- 접근 정보 조회
+    
     SELECT failed_count, unlock_at
     INTO v_failed, v_unlock_at
     FROM payslip_access
     WHERE payslip_id = p_payslip_id
     FOR UPDATE;
 
-    -- 잠금 상태 확인
+ 
     IF v_unlock_at IS NOT NULL AND v_unlock_at > NOW() THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = '비밀번호 입력 실패로 잠금 상태입니다';
     END IF;
 
-    -- 생년월일 검증
+  
     IF v_birth_pwd_db <> p_birth_pwd THEN
         UPDATE payslip_access
         SET failed_count = failed_count + 1,
@@ -389,21 +396,21 @@ BEGIN
             updated_at = CURRENT_TIMESTAMP
         WHERE payslip_id = p_payslip_id;
 		  
-		  -- 실패 기록은 반드시 남겨야 하므로 커밋
+		  
         COMMIT;
 			
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = '생년월일이 일치하지 않습니다';
     END IF;
 
-    -- 성공 시 실패 횟수 초기화
+   
     UPDATE payslip_access
     SET failed_count = 0,
         unlock_at = NULL,
         updated_at = CURRENT_TIMESTAMP
     WHERE payslip_id = p_payslip_id;
 
-    -- 급여 명세서 요약
+ 
  	 SELECT
 		  e.`name`,	
 		  d.dept_name,
@@ -418,7 +425,7 @@ BEGIN
 	 JOIN department d ON e.dept_id = d.dept_id
 	 WHERE p.payslip_id = p_payslip_id;
 		
-	 -- 급여 항목
+	
  	 SELECT
 	     pit.pay_item_name,
 	     pit.item_type,
