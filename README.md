@@ -48,7 +48,9 @@
 ## 📊 WBS
 ![WBS](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/WBS.png?raw=true)
 
-## 📄 요구사항 명세서
+## 📄 요구사항 정의서
+![요구사항 정의서](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD%20%EC%A0%95%EC%9D%98%EC%84%9C.png?raw=true)
+https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD%EC%A0%95%EC%9D%98%EC%84%9C.pdf
 
 ## 📉 유스케이스 다이어그램
 ![유스케이스 다이어그램](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9C%A0%EC%8A%A4%EC%BC%80%EC%9D%B4%EC%8A%A4%20%EB%8B%A4%EC%9D%B4%EC%96%B4%EA%B7%B8%EB%9E%A8.jpg?raw=true)
