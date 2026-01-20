@@ -83,8 +83,8 @@ CREATE TABLE employee (
     FOREIGN KEY (position_id) REFERENCES `job_position`(position_id)
 );
 ```
-      </details> 
-      <details>
+  </details>   
+  <details>
         <summary>user</summary>
         
 ```sql
@@ -100,8 +100,8 @@ CREATE TABLE user (
     FOREIGN KEY (emp_id) REFERENCES employee(emp_id)
 );
 ```
-      </details> 
-      <details>
+  </details>   
+  <details>
         <summary>emp_status_history</summary>
         
 ```sql
@@ -117,8 +117,8 @@ CREATE TABLE emp_status_history (
     FOREIGN KEY (admin_id) REFERENCES `user`(user_id)
 );
 ```
-      </details> 
-      <details>
+  </details>   
+  <details>
         <summary>department</summary>
         
 ```sql
@@ -132,8 +132,8 @@ CREATE TABLE department (
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 ```
-      </details>
-      <details>
+  </details>   
+  <details>
         <summary>department_change_history</summary>
         
 ```sql
@@ -149,8 +149,8 @@ CREATE TABLE department_change_history (
     FOREIGN KEY (admin_id) REFERENCES `user`(user_id)
 );
 ```
-      </details> 
-      <details>
+  </details>   
+  <details>
         <summary>job_position</summary>
         
 ```sql
@@ -162,8 +162,8 @@ CREATE TABLE job_position (
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 ```
-      </details> 
-      <details>
+  </details>   
+  <details>
         <summary>position_change_history</summary>
         
 ```sql
@@ -179,8 +179,7 @@ CREATE TABLE position_change_history (
     FOREIGN KEY (admin_id) REFERENCES `user`(user_id)
 );
 ```
-      </details> 
-	  
+  </details>   
    </details>
    
    <details>
@@ -222,7 +221,7 @@ CREATE TABLE attendance_status (
 );
 ```
   </details>   
-<details>
+  <details>
         <summary>work_type</summary>
         
 ```sql
@@ -238,8 +237,7 @@ CREATE TABLE work_type (
 );
 ```
   </details>   
-
-<details>
+  <details>
         <summary>overtime_record</summary>
         
 ```sql
@@ -268,8 +266,8 @@ CREATE TABLE overtime_record (
     )
 );
 ```
-  </details>  
-<details>
+  </details>   
+  <details>
         <summary>leave_type</summary>
         
 ```sql
@@ -282,8 +280,8 @@ CREATE TABLE leave_type (
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 ```
-  </details>
-<details>
+  </details>   
+  <details>
         <summary>leave_history</summary>
         
 ```sql
@@ -359,11 +357,12 @@ CREATE TABLE leave_annual_policy (
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP  
 );
 ```
-  </details>
-      </details>
+  </details>  
+   </details>
+   
    <details>
-     <summary>📌급여관리 시스템</summary>
-      <details>
+    <summary>📌 급여관리 시스템</summary>
+     <details>
         <summary>payslip</summary>
         
 ```sql
@@ -383,7 +382,7 @@ CREATE TABLE payslip (
 );
 ```
   </details>   
-     <details>
+  <details>
         <summary>payslip_item</summary>
         
 ```sql
@@ -399,7 +398,7 @@ CREATE TABLE payslip_item (
 );
 ```
   </details>   
-     <details>
+  <details>
         <summary>payslip_access</summary>
         
 ```sql
@@ -414,7 +413,7 @@ CREATE TABLE payslip_access (
 );
 ```
   </details>   
-     <details>
+  <details>
         <summary>payslip_item</summary>
         
 ```sql
@@ -431,7 +430,7 @@ CREATE TABLE pay_item (
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 ```
-     </details>   
+  </details>     
    </details>
   
 </details>
