@@ -463,6 +463,16 @@ CREATE OR REPLACE PROCEDURE overtime_record_create (
     IN p_reason TEXT
 )
 BEGIN
+	 IF p_overtime_minutes IS NULL OR p_overtime_minutes <= 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '초과근무 신청 실패: overtime_minutes는 1 이상이어야 합니다.';
+    END IF;
+
+    IF p_reason IS NULL OR LENGTH(TRIM(p_reason)) = 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '초과근무 신청 실패: reason은 필수입니다.';
+    END IF;
+    
     INSERT INTO overtime_record (
         emp_id, work_date, overtime_minutes,
         reason,
