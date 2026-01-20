@@ -47,7 +47,7 @@ CREATE TABLE leave_type (
 
 CREATE TABLE leave_annual_policy (
     leave_annual_policy_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    leave_type_id BIGINT NOT NULL,       
+    leave_type_id BIGINT NOT NULL REFERENCES leave_type(leave_type_id),       
     min_years INT NOT NULL,              
     max_years INT NOT NULL,              
     annual_max_days INT NOT NULL,        
