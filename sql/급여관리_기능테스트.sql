@@ -109,6 +109,7 @@ CREATE OR REPLACE PROCEDURE payslip_create (
 BEGIN
     DECLARE v_payslip_id BIGINT;
     DECLARE v_base_salary DECIMAL(12,0);
+    DECLARE v_hourly_rate DECIMAL(12,2);
     DECLARE v_total_pay DECIMAL(12,0) DEFAULT 0;
     DECLARE v_total_deduct DECIMAL(12,0) DEFAULT 0;
     DECLARE v_absence_count INT DEFAULT 0;
@@ -116,6 +117,8 @@ BEGIN
     DECLARE v_early_count INT DEFAULT 0;
     DECLARE v_total_absence INT DEFAULT 0;
     DECLARE v_absence_item_id BIGINT;
+    DECLARE v_extend_item_id BIGINT;
+    DECLARE v_night_item_id BIGINT;
 
     -- 예외 발생 시 롤백
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
@@ -148,7 +151,7 @@ BEGIN
         SET MESSAGE_TEXT = '이미 생성된 급여 명세서가 있습니다.';
     END IF;
 
-    -- 기본급 조회 (직급 기준)
+    -- 기본급 조회
     SELECT jp.base_salary
     INTO v_base_salary
     FROM employee e
@@ -156,22 +159,78 @@ BEGIN
       ON e.position_id = jp.position_id
     WHERE e.emp_id = p_emp_id;
 
+    -- 시간당 단가 계산 (월 209시간 기준)
+    SET v_hourly_rate = v_base_salary / 209;
+
     -- payslip 생성
     INSERT INTO payslip (emp_id, pay_ym, status)
     VALUES (p_emp_id, p_pay_ym, 'CREATED');
-
     SET v_payslip_id = LAST_INSERT_ID();
 
-    -- 기본급 항목 저장
+    -- 기본급 항목 삽입
     INSERT INTO payslip_item (payslip_id, pay_item_id, amount)
     SELECT v_payslip_id, pi.pay_item_id, v_base_salary
     FROM pay_item pi
     WHERE pi.pay_item_code = 'BASE_SALARY'
       AND pi.use_yn = 'Y';
-
     SET v_total_pay = v_base_salary;
 
-    -- 4대보험 공제만 RATE로 계산 (결근 제외)
+    -- 연장근무/야간근무 pay_item_id 조회
+    SELECT pay_item_id INTO v_extend_item_id
+    FROM pay_item
+    WHERE pay_item_code = 'OVERTIME_EXTEND'
+      AND use_yn = 'Y'
+    LIMIT 1;
+
+    SELECT pay_item_id INTO v_night_item_id
+    FROM pay_item
+    WHERE pay_item_code = 'OVERTIME_NIGHT'
+      AND use_yn = 'Y'
+    LIMIT 1;
+
+    -- ==== 연장근무 건별 삽입 ====
+    INSERT INTO payslip_item (payslip_id, pay_item_id, amount)
+    SELECT
+        v_payslip_id, v_extend_item_id,
+        ROUND(v_hourly_rate * 1.5 * overtime_minutes / 60, 0)
+    FROM overtime_record
+    WHERE emp_id = p_emp_id
+      AND DATE_FORMAT(work_date, '%Y-%m') = p_pay_ym
+      AND approval_status = 'APPROVED'
+      AND overtime_type = 'EXTEND';
+
+    -- 연장근무 총액 합산
+    SET v_total_pay = v_total_pay + IFNULL((
+        SELECT SUM(ROUND(v_hourly_rate * 1.5 * overtime_minutes / 60, 0))
+        FROM overtime_record
+        WHERE emp_id = p_emp_id
+          AND DATE_FORMAT(work_date, '%Y-%m') = p_pay_ym
+          AND approval_status = 'APPROVED'
+          AND overtime_type = 'EXTEND'
+    ), 0);
+
+    -- 야간근무 건별 삽입
+    INSERT INTO payslip_item (payslip_id, pay_item_id, amount)
+    SELECT
+        v_payslip_id, v_night_item_id,
+        ROUND(v_hourly_rate * 2 * overtime_minutes / 60, 0)
+    FROM overtime_record
+    WHERE emp_id = p_emp_id
+      AND DATE_FORMAT(work_date, '%Y-%m') = p_pay_ym
+      AND approval_status = 'APPROVED'
+      AND overtime_type = 'NIGHT';
+
+    -- 야간근무 총액 합산
+    SET v_total_pay = v_total_pay + IFNULL((
+        SELECT SUM(ROUND(v_hourly_rate * 2 * overtime_minutes / 60, 0))
+        FROM overtime_record
+        WHERE emp_id = p_emp_id
+          AND DATE_FORMAT(work_date, '%Y-%m') = p_pay_ym
+          AND approval_status = 'APPROVED'
+          AND overtime_type = 'NIGHT'
+    ), 0);
+
+    -- 4대보험 공제 계산
     INSERT INTO payslip_item (payslip_id, pay_item_id, amount)
     SELECT v_payslip_id, pi.pay_item_id, ROUND(v_base_salary * pi.calc_value / 100, 0)
     FROM pay_item pi
@@ -192,10 +251,9 @@ BEGIN
     WHERE ar.emp_id = p_emp_id
       AND DATE_FORMAT(ar.work_date, '%Y-%m') = p_pay_ym;
 
-    -- 지각/조퇴 환산 후 총 결근 계산
     SET v_total_absence = v_absence_count + FLOOR((v_late_count + v_early_count)/2);
 
-    -- 결근 공제 pay_item_id 변수에 담기
+    -- 결근 공제 pay_item_id 조회
     SELECT pay_item_id
     INTO v_absence_item_id
     FROM pay_item
@@ -203,7 +261,6 @@ BEGIN
       AND use_yn = 'Y'
     LIMIT 1;
 
-    -- 결근 공제 INSERT (중복 방지)
     IF v_total_absence > 0 AND v_absence_item_id IS NOT NULL THEN
         INSERT INTO payslip_item (payslip_id, pay_item_id, amount)
         VALUES (v_payslip_id, v_absence_item_id, ROUND(v_base_salary * 0.05 * v_total_absence, 0));
@@ -232,13 +289,7 @@ BEGIN
 END$$
 DELIMITER ;
 
-CALL payslip_create(1, '2026-01');
-
--- 확인
-SELECT * FROM employee;
-SELECT * FROM payslip;
-SELECT * FROM payslip_item;
-SELECT * FROM payslip_access;
+CALL payslip_create(3, '2026-01');
 
 
 
