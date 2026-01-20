@@ -177,7 +177,7 @@ LEFT JOIN leave_annual_policy lap
 
 
 
--- 출퇴근 기록 등록 (요구사항 코드: INOUT_001)
+-- 출근 기록 등록 (요구사항 코드: INOUT_001)
 DELIMITER $$
 CREATE OR REPLACE PROCEDURE check_in (
     IN p_emp_id BIGINT,
@@ -414,104 +414,111 @@ CALL attendance_record_select(NULL, NULL, '2026-01-01', '2026-01-31');
 
 
 
--- 초과근무 기록 등록 (요구사항 코드 : INOUT_003)
+-- 초과근무 신청 등록(요구사항 코드 : INOUT_003)
 DELIMITER $$
-CREATE PROCEDURE overtime_record_create (
+CREATE OR REPLACE PROCEDURE overtime_record_create (
     IN p_emp_id BIGINT,
     IN p_work_date DATE,
     IN p_overtime_minutes INT,
-    IN p_overtime_type VARCHAR(20) 
+    IN p_overtime_type VARCHAR(20),
+    IN p_reason TEXT
 )
 BEGIN
     INSERT INTO overtime_record (
-        emp_id,
-        work_date,
-        overtime_minutes,
-        approval_status,
-        overtime_type,
-        created_at,
-        updated_at
+        emp_id, work_date, overtime_minutes,
+        reason,
+        approval_status, overtime_type,
+        created_at, updated_at
     ) VALUES (
-        p_emp_id,
-        p_work_date,
-        p_overtime_minutes,
-        'PENDING',
-        p_overtime_type,
-        NOW(),
-        NOW()
+        p_emp_id, p_work_date, p_overtime_minutes,
+        p_reason,
+        'PENDING', p_overtime_type,
+        NOW(), NOW()
     );
 END$$
 DELIMITER ;
 
-CALL overtime_record_create(1, '2026-01-19', 120, 'EXTEND');
+CALL overtime_record_create(1, '2026-01-19', 120, 'EXTEND', '배포 대응으로 연장근무 필요');
 
-
-
--- 초과근무 승인/반려 (요구사항 코드 : INOUT_003)
+-- 초과근무 승인 (요구사항 코드 : INOUT_003)
 DELIMITER $$
-CREATE OR REPLACE PROCEDURE overtime_record_decide (
+CREATE OR REPLACE PROCEDURE overtime_record_approve (
     IN p_overtime_id BIGINT,
-    IN p_decision VARCHAR(10) -- APPROVED / REJECTED
+    IN p_admin_emp_id BIGINT
 )
 BEGIN
-    -- 상태값 검증
-    IF p_decision NOT IN ('APPROVED', 'REJECTED') THEN
-        SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Invalid approval status';
-    END IF;
-
     UPDATE overtime_record
-    SET approval_status = p_decision,
+    SET approval_status = 'APPROVED',
+        approved_by = p_admin_emp_id,
         approved_at = NOW(),
+        reject_reason = NULL,
+        rejected_by = NULL,
+        rejected_at = NULL,
         updated_at = NOW()
-    WHERE overtime_id = p_overtime_id;
+    WHERE overtime_id = p_overtime_id
+      AND approval_status = 'PENDING';
 
-    -- 대상 없음 → 에러
     IF ROW_COUNT() = 0 THEN
         SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Overtime record not found';
+            SET MESSAGE_TEXT = '초과근무 승인 실패: PENDING 상태만 승인할 수 있습니다.';
     END IF;
 END$$
 DELIMITER ;
 
--- 승인
-CALL overtime_record_decide(2, 'APPROVED');
--- 반려
-CALL overtime_record_decide(3, 'REJECTED');
+-- 초과근무 반려 (요구사항 코드 : INOUT_003)
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE overtime_record_reject (
+    IN p_overtime_id BIGINT,
+    IN p_admin_emp_id BIGINT,
+    IN p_reject_reason TEXT
+)
+BEGIN
+    IF p_reject_reason IS NULL OR LENGTH(TRIM(p_reject_reason)) = 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '초과근무 반려 실패: 반려 사유는 필수입니다.';
+    END IF;
 
+    UPDATE overtime_record
+    SET approval_status = 'REJECTED',
+        rejected_by = p_admin_emp_id,
+        rejected_at = NOW(),
+        reject_reason = p_reject_reason,
+        approved_by = NULL,
+        approved_at = NULL,
+        updated_at = NOW()
+    WHERE overtime_id = p_overtime_id
+      AND approval_status = 'PENDING';
+
+    IF ROW_COUNT() = 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '초과근무 반려 실패: PENDING 상태만 반려할 수 있습니다.';
+    END IF;
+END$$
+DELIMITER ;
+
+CALL overtime_record_approve(2, 1);
+CALL overtime_record_reject(3, 1, '사전 신청 누락');
 
 
 -- 휴가 신청 등록 (요구사항 코드 : INOUT_004)
 DELIMITER $$
-CREATE PROCEDURE leave_request_create (
+CREATE OR REPLACE PROCEDURE leave_request_create (
     IN p_emp_id BIGINT,
     IN p_leave_type_id BIGINT,
     IN p_start_date DATE,
     IN p_end_date DATE,
-    IN p_reason VARCHAR(255),
+    IN p_reason TEXT,
     IN p_use_days DECIMAL(3,1)
 )
 BEGIN
     INSERT INTO leave_request (
-        emp_id,
-        leave_type_id,
-        start_date,
-        end_date,
-        reason,
-        use_days,
-        approval_status,
-        created_at,
-        updated_at
+        emp_id, leave_type_id, start_date, end_date,
+        reason, use_days, approval_status,
+        created_at, updated_at
     ) VALUES (
-        p_emp_id,
-        p_leave_type_id,
-        p_start_date,
-        p_end_date,
-        p_reason,
-        p_use_days,
-        'PENDING',
-        CURRENT_TIMESTAMP,
-        CURRENT_TIMESTAMP
+        p_emp_id, p_leave_type_id, p_start_date, p_end_date,
+        p_reason, p_use_days, 'PENDING',
+        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
     );
 END$$
 DELIMITER ;
@@ -547,8 +554,9 @@ CALL leave_request_cancel(3);
 
 -- 휴가 승인
 DELIMITER $$
-CREATE PROCEDURE leave_request_approve (
-    IN p_leave_request_id BIGINT
+CREATE OR REPLACE PROCEDURE leave_request_approve (
+    IN p_leave_request_id BIGINT,
+    IN p_admin_emp_id BIGINT
 )
 BEGIN
     DECLARE v_use_days DECIMAL(3,1);
@@ -558,49 +566,81 @@ BEGIN
     BEGIN
         ROLLBACK;
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT =
-            '휴가 승인(INOUT_004) 실패: 해당 휴가 신청을 찾을 수 없습니다.';
+        SET MESSAGE_TEXT = '휴가 승인 실패: 해당 휴가 신청을 찾을 수 없습니다.';
     END;
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        GET DIAGNOSTICS CONDITION 1
-            v_errmsg = MESSAGE_TEXT;
+        GET DIAGNOSTICS CONDITION 1 v_errmsg = MESSAGE_TEXT;
         ROLLBACK;
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = v_errmsg;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_errmsg;
     END;
 
     START TRANSACTION;
 
     SELECT use_days
-    INTO v_use_days
-    FROM leave_request
-    WHERE leave_request_id = p_leave_request_id;
+      INTO v_use_days
+      FROM leave_request
+     WHERE leave_request_id = p_leave_request_id;
 
     UPDATE leave_request
-    SET approval_status = 'APPROVED',
-        updated_at = CURRENT_TIMESTAMP
-    WHERE leave_request_id = p_leave_request_id
-      AND approval_status = 'PENDING';
+       SET approval_status = 'APPROVED',
+           approved_by = p_admin_emp_id,
+           approved_at = NOW(),
+           rejected_by = NULL,
+           rejected_at = NULL,
+           reject_reason = NULL,
+           updated_at = CURRENT_TIMESTAMP
+     WHERE leave_request_id = p_leave_request_id
+       AND approval_status = 'PENDING';
 
     IF ROW_COUNT() = 0 THEN
         ROLLBACK;
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT =
-            '휴가 승인(INOUT_004) 실패: PENDING 상태인 요청만 승인할 수 있습니다.';
+        SET MESSAGE_TEXT = '휴가 승인 실패: PENDING 상태만 승인할 수 있습니다.';
     END IF;
 
     INSERT INTO leave_history (leave_request_id, use_days)
     VALUES (p_leave_request_id, v_use_days);
+
     COMMIT;
 END$$
 DELIMITER ;
 
-CALL leave_request_approve(4);
-CALL leave_request_approve(1);
+CALL leave_request_approve(4, 1);
 
+-- 휴가 반려
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE leave_request_reject (
+    IN p_leave_request_id BIGINT,
+    IN p_admin_emp_id BIGINT,
+    IN p_reject_reason TEXT
+)
+BEGIN
+    IF p_reject_reason IS NULL OR LENGTH(TRIM(p_reject_reason)) = 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = '휴가 반려 실패: 반려 사유는 필수입니다.';
+    END IF;
 
+    UPDATE leave_request
+       SET approval_status = 'REJECTED',
+           rejected_by = p_admin_emp_id,
+           rejected_at = NOW(),
+           reject_reason = p_reject_reason,
+           approved_by = NULL,
+           approved_at = NULL,
+           updated_at = CURRENT_TIMESTAMP
+     WHERE leave_request_id = p_leave_request_id
+       AND approval_status = 'PENDING';
+
+    IF ROW_COUNT() = 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = '휴가 반려 실패: PENDING 상태만 반려할 수 있습니다.';
+    END IF;
+END$$
+DELIMITER ;
+
+CALL leave_request_reject(5, 1, '증빙 서류 미첨부');
 
 -- 근태 기록 수정 (요구사항 코드 : INOUT_005)
 DELIMITER $$

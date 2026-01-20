@@ -1,3 +1,9 @@
+CREATE DATABASE hr_system
+    DEFAULT CHARACTER SET utf8mb4
+    COLLATE utf8mb4_general_ci;
+
+USE hr_system;
+
 CREATE TABLE department (
     dept_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     dept_code VARCHAR(20) NOT NULL UNIQUE,
@@ -159,12 +165,24 @@ CREATE TABLE overtime_record (
     emp_id BIGINT NOT NULL,
     work_date DATE NOT NULL,
     overtime_minutes INT CHECK (overtime_minutes >= 0),
-    approval_status VARCHAR(20),
-    approved_at DATETIME,
+    reason TEXT,
+    reject_reason TEXT,
+    approval_status ENUM('PENDING','APPROVED','REJECTED') NOT NULL DEFAULT 'PENDING',
+    approved_by BIGINT NULL,
+	 approved_at DATETIME NULL,
+	 rejected_by BIGINT NULL,
+    rejected_at DATETIME NULL,
     overtime_type VARCHAR(20),
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (emp_id) REFERENCES employee(emp_id)
+    FOREIGN KEY (emp_id) REFERENCES employee(emp_id),
+    CHECK (
+      (approval_status = 'PENDING'  AND approved_at IS NULL AND rejected_at IS NULL)
+      OR
+      (approval_status = 'APPROVED' AND approved_at IS NOT NULL AND rejected_at IS NULL)
+      OR
+      (approval_status = 'REJECTED' AND rejected_at IS NOT NULL AND approved_at IS NULL)
+    )
 );
 
 CREATE TABLE leave_request (
@@ -174,12 +192,26 @@ CREATE TABLE leave_request (
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     reason TEXT,
+    reject_reason TEXT, 
     use_days DECIMAL(3,1) CHECK (use_days >= 0),
+    approval_status ENUM('PENDING','APPROVED','REJECTED') NOT NULL DEFAULT 'PENDING',
+    approved_by BIGINT NULL,
+    approved_at DATETIME NULL,
+    rejected_by BIGINT NULL,
+    rejected_at DATETIME NULL,
     approval_status VARCHAR(20),
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (emp_id) REFERENCES employee(emp_id),
-    FOREIGN KEY (leave_type_id) REFERENCES leave_type(leave_type_id)
+    FOREIGN KEY (leave_type_id) REFERENCES leave_type(leave_type_id),
+    -- 승인/반려가 동시에 들어가면 안 됨(가능하면 DB에서 방지)
+    CHECK (
+      (approval_status = 'PENDING'  AND approved_at IS NULL AND rejected_at IS NULL)
+      OR
+      (approval_status = 'APPROVED' AND approved_at IS NOT NULL AND rejected_at IS NULL)
+      OR
+      (approval_status = 'REJECTED' AND rejected_at IS NOT NULL AND approved_at IS NULL)
+    )
 );
 
 CREATE TABLE leave_history (
