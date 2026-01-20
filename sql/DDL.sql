@@ -168,7 +168,7 @@ CREATE TABLE overtime_record (
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (emp_id) REFERENCES employee(emp_id),
-    FOREIGN KEY (created_by) REFERENCES employee(emp_id),
+    FOREIGN KEY (decided_by) REFERENCES employee(emp_id),
     CHECK (
       (approval_status = 'PENDING')
       OR
