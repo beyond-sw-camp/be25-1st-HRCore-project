@@ -389,7 +389,7 @@ BEGIN
 
     START TRANSACTION;
     -- 1. 사원 상태 변경 (퇴직)
-    UPDATE employeeemployee
+    UPDATE employee
     SET
         status = '퇴직',
         resign_date = CURRENT_DATE,
