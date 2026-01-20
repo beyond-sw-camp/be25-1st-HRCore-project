@@ -540,6 +540,7 @@ BEGIN
     UPDATE overtime_record
     SET approval_status = 'APPROVED',
         decided_by = p_admin_emp_id,
+        decided_at = NOW(),
         updated_at = NOW()
     WHERE overtime_id = p_overtime_id
       AND approval_status = 'PENDING';
@@ -567,6 +568,7 @@ BEGIN
     UPDATE overtime_record
     SET approval_status = 'REJECTED',
         decided_by = p_admin_emp_id,
+        decided_at = NOW(),
         reject_reason = p_reject_reason,
         updated_at = NOW()
     WHERE overtime_id = p_overtime_id
@@ -584,8 +586,6 @@ CALL overtime_record_reject(10, 1, '사전 신청 누락');
 
 
 -- 휴가 신청 등록 (요구사항 코드 : INOUT_004)
-DROP PROCEDURE IF EXISTS leave_request_create;
-
 DELIMITER $$
 CREATE OR REPLACE PROCEDURE leave_request_create (
     IN p_emp_id BIGINT,
@@ -639,15 +639,14 @@ END$$
 DELIMITER ;
 
 CALL leave_request_create(2, 1, '2026-02-03', '2026-02-03', '개인사유', 1.0);
-CALL leave_request_create(3, 1, '2026-02-03', '2026-02-03', '개인사유', 0.5);
-CALL leave_request_create(3, 4, '2026-02-05', '2026-02-07', '예비군', 3);
+CALL leave_request_create(3, 1, '2026-02-04', '2026-02-04', '개인사유', 0.5);
 CALL leave_request_create(3, 4, '2026-02-06', '2026-02-08', '예비군', 3);
 CALL leave_request_create(2, 1, '2026-01-25', '2026-01-26', '개인사유', 2);
 
 -- 휴가신청 취소
 -- 승인 전(PENDING)일 때만 취소 가능
 DELIMITER $$
-CREATE PROCEDURE leave_request_cancel (
+CREATE OR REPLACE PROCEDURE leave_request_cancel (
     IN p_leave_request_id BIGINT
 )
 BEGIN
@@ -665,7 +664,7 @@ BEGIN
 END$$
 DELIMITER ;
 
-CALL leave_request_cancel(3);
+CALL leave_request_cancel(1);
 
 -- 휴가 승인
 DELIMITER $$
@@ -700,11 +699,8 @@ BEGIN
 
     UPDATE leave_request
        SET approval_status = 'APPROVED',
-           approved_by = p_admin_emp_id,
-           approved_at = NOW(),
-           rejected_by = NULL,
-           rejected_at = NULL,
-           reject_reason = NULL,
+       	  decided_by = p_admin_emp_id,
+       	  decided_at = NOW(), 
            updated_at = CURRENT_TIMESTAMP
      WHERE leave_request_id = p_leave_request_id
        AND approval_status = 'PENDING';
@@ -722,7 +718,7 @@ BEGIN
 END$$
 DELIMITER ;
 
-CALL leave_request_approve(4, 1);
+CALL leave_request_approve(2, 1);
 
 -- 휴가 반려
 DELIMITER $$
@@ -739,11 +735,9 @@ BEGIN
 
     UPDATE leave_request
        SET approval_status = 'REJECTED',
-           rejected_by = p_admin_emp_id,
-           rejected_at = NOW(),
+           decided_by = p_admin_emp_id,
+           decided_at = NOW(),
            reject_reason = p_reject_reason,
-           approved_by = NULL,
-           approved_at = NULL,
            updated_at = CURRENT_TIMESTAMP
      WHERE leave_request_id = p_leave_request_id
        AND approval_status = 'PENDING';
@@ -755,7 +749,7 @@ BEGIN
 END$$
 DELIMITER ;
 
-CALL leave_request_reject(5, 1, '증빙 서류 미첨부');
+CALL leave_request_reject(3, 1, '증빙 서류 미첨부');
 
 -- 근태 기록 수정 (요구사항 코드 : INOUT_005)
 DELIMITER $$
