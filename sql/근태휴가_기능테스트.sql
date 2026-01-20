@@ -317,14 +317,13 @@ CALL check_out(3, '2026-01-20', '2026-01-20 18:00:00');
 
 
 
--- 결근/휴가 기록
+-- 결근 기록
 DELIMITER $$
 CREATE OR REPLACE PROCEDURE attendance_finalize_daily (
     IN p_work_date DATE
 )
 BEGIN
     DECLARE v_absent_status_id BIGINT;
-    DECLARE v_leave_status_id  BIGINT;
 
     DECLARE v_sqlstate CHAR(5);
     DECLARE v_errmsg TEXT;
@@ -349,37 +348,6 @@ BEGIN
      WHERE status_code = 'ABSENT'
        AND use_yn = 'Y';
 
-    -- 휴가 상태 ID
-    SELECT status_id
-      INTO v_leave_status_id
-      FROM attendance_status
-     WHERE status_code = 'LEAVE'
-       AND use_yn = 'Y';
-
-    -- 휴가 처리
-    INSERT INTO attendance_record (
-        emp_id,
-        work_date,
-        status_check_in,
-        created_at,
-        updated_at
-    )
-    SELECT
-        e.emp_id,
-        p_work_date,
-        v_leave_status_id,
-        CURRENT_TIMESTAMP,
-        CURRENT_TIMESTAMP
-    FROM employee e
-    JOIN leave_request lr
-      ON lr.emp_id = e.emp_id
-     AND lr.approval_status = 'APPROVED'
-     AND p_work_date BETWEEN lr.start_date AND lr.end_date
-    LEFT JOIN attendance_record ar
-      ON ar.emp_id = e.emp_id
-     AND ar.work_date = p_work_date
-    WHERE ar.attendance_id IS NULL;
-
     -- 결근 처리
     INSERT INTO attendance_record (
         emp_id,
@@ -398,18 +366,12 @@ BEGIN
     LEFT JOIN attendance_record ar
       ON ar.emp_id = e.emp_id
      AND ar.work_date = p_work_date
-    LEFT JOIN leave_request lr
-      ON lr.emp_id = e.emp_id
-     AND lr.approval_status = 'APPROVED'
-     AND p_work_date BETWEEN lr.start_date AND lr.end_date
-    WHERE ar.attendance_id IS NULL
-      AND lr.leave_request_id IS NULL;
+    WHERE ar.attendance_id IS NULL;
     COMMIT;
 END$$
 DELIMITER ;
 
-CALL attendance_finalize_daily('2026-02-07');
-
+CALL attendance_finalize_daily('2026-01-25');
 
 
 -- 출퇴근 기록 조회 (요구사항 코드 : INOUT_002)
@@ -558,6 +520,7 @@ CALL leave_request_create(2, 1, '2026-02-03', '2026-02-03', '개인사유', 1.0)
 CALL leave_request_create(3, 1, '2026-02-03', '2026-02-03', '개인사유', 0.5);
 CALL leave_request_create(3, 4, '2026-02-05', '2026-02-07', '예비군', 3);
 CALL leave_request_create(3, 4, '2026-02-06', '2026-02-08', '예비군', 3);
+CALL leave_request_create(2, 1, '2026-01-25', '2026-01-26', '개인사유', 2);
 
 -- 휴가신청 취소
 -- 승인 전(PENDING)일 때만 취소 가능
@@ -635,6 +598,7 @@ END$$
 DELIMITER ;
 
 CALL leave_request_approve(4);
+CALL leave_request_approve(1);
 
 
 
