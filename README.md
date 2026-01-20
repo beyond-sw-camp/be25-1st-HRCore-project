@@ -39,7 +39,7 @@
 이를 통해 본 프로젝트는 단순한 인사 정보 관리 수준을 넘어, 중소기업 환경에 적합한 통합 HR 관리 시스템 설계 모델을 제시하고 향후 종합 HR 그룹웨어로 발전할 수 있는 기반을 마련하고자 한다.
 
 ## 📊 WBS
-![WBS](https://github.com/beyond-sw-camp/be25-1st-HRCore-project/blob/main/WBS.png?raw=true)
+![WBS](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/WBS.png?raw=true)
 
 ## 📄 요구사항 명세서
 
