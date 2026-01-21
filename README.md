@@ -2420,19 +2420,19 @@ CALL pay_item_create('OVERTIME_NIGHT','야간근무 수당','EARN','RULE',NULL,'
 ![급여 항목 등록](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B8%89%EC%97%AC%20%ED%85%8C%EC%8A%A4%ED%8A%B8/%EA%B8%89%EC%97%AC%20%ED%95%AD%EB%AA%A9%20%EB%93%B1%EB%A1%9D%20%EC%8B%A4%ED%96%89%20%EA%B2%B0%EA%B3%BC.png?raw=true)
   </details>   
    <details>
-        <summary> 급여항목 요율 변경</summary>
+        <summary> 급여 항목 요율 변경</summary>
      
 ```sql
--- 급여항목 요율 변경
+-- 급여 항목 요율 변경
 CALL pay_item_update_value('INDUSTRIAL_ACCIDENT_INSURANCE',1.25);
 ```
 ![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B8%89%EC%97%AC%20%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%82%B0%EC%9E%AC%EB%B3%B4%ED%97%98%20%EC%9A%94%EC%9C%A8%20%EB%B3%80%EA%B2%BD%20%EC%8B%A4%ED%96%89%20%EA%B2%B0%EA%B3%BC.png?raw=true)
   </details>   
    <details>
-        <summary> 급여항목 활성화 상태 변경</summary>
+        <summary> 급여 항목 활성화 상태 변경</summary>
      
 ```sql
--- 급여항목 활성화 상태 변경
+-- 급여 항목 활성화 상태 변경
 CALL pay_item_toggle_use('INDUSTRIAL_ACCIDENT_INSURANCE','N');
 ```
 ![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B8%89%EC%97%AC%20%ED%85%8C%EC%8A%A4%ED%8A%B8/%EA%B8%89%EC%97%AC%20%ED%95%AD%EB%AA%A9%20%ED%99%9C%EC%84%B1%ED%99%94%20%EC%8B%A4%ED%96%89%20%EA%B2%B0%EA%B3%BC.png?raw=true)
