@@ -2190,7 +2190,7 @@ CALL emp_leave(2,2,'개인 사유로 인한 휴직');
 CALL emp_return(2,2,'휴직 종료 및 복직');
 ```
 ![재직처리전](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%9E%AC%EC%A7%81%EC%B2%98%EB%A6%AC%20%EC%A0%84.png?raw=true)
-![재직처리후](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%9E%AC%EC%A7%81%EC%B2%98%EB%A6%AC%20%EC%A0%84.png?raw=true)
+![재직처리후](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%9E%AC%EC%A7%81%EC%B2%98%EB%A6%AC%20%ED%9B%84.png?raw=true)
   </details>   
    <details>
         <summary> 사원의 퇴직 처리</summary>
