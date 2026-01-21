@@ -2203,6 +2203,7 @@ CALL register_employee_with_user('test03.dev@company.com','테스트사원03','0
 CALL register_employee_with_user('test04.dev@company.com','테스트사원04','010-1575-5778','930104-1653427','우리','167-2589-413677','2021-02-04');
 ```
 ![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%82%AC%EC%9B%90%20%EB%93%B1%EB%A1%9D.png?raw=true)
+![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B3%84%EC%A0%95%20%EC%A1%B0%ED%9A%8C%20(2).png?raw=true)
   </details>   
    <details>
         <summary> 사원의 이메일이 변경될 시 (트랜잭션 발생)</summary>
