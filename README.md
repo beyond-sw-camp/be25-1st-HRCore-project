@@ -2257,6 +2257,7 @@ CALL emp_assign_department(2,1,2);
 -- 사원의 부서 이동
 CALL emp_change_department(2,2,2);
 ```
+![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EB%B6%80%EC%84%9C%20%EB%B0%B0%EC%A0%95.png?raw=true)
 ![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EB%B6%80%EC%84%9C%20%EC%9D%B4%EB%8F%99.png?raw=true)
 ![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EB%B6%80%EC%84%9C%20%EB%B3%80%EA%B2%BD%20%EC%9D%B4%EB%A0%A5.png?raw=true)
   </details>   
@@ -2270,7 +2271,6 @@ CALL emp_assign_position(2,2,2);
 CALL emp_assign_position(3,2,2);
 ```
 ![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%A7%81%EA%B8%89%20%EB%B0%B0%EC%A0%95.png?raw=true)
-![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%A7%81%EA%B8%89%20%EB%B3%80%EA%B2%BD%20%EC%9D%B4%EB%A0%A5.png?raw=true)
   </details>   
    <details>
         <summary> 사원의 승진 처리</summary>
@@ -2281,6 +2281,7 @@ CALL promote_employee(3, 2);
 ```
 ![승진이전](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%8A%B9%EC%A7%84%20%EC%9D%B4%EC%A0%84.png?raw=true)
 ![승진이후](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%8A%B9%EC%A7%84%20%EC%9D%B4%ED%9B%84.png?raw=true)
+![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%A7%81%EA%B8%89%20%EB%B3%80%EA%B2%BD%20%EC%9D%B4%EB%A0%A5.png?raw=true)
 </details>
   </details>
   <details>
