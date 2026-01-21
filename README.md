@@ -29,23 +29,50 @@
 |![이미지 설명](https://search.pstatic.net/sunny/?src=https%3A%2F%2Fkr-cdn.spooncast.net%2Fprofiles%2Ff%2FArlDKfnn9Qrp%2F9f30c88d-9987-4443-be94-6345fb2dab13.jpg&type=sc960_832) |![이미지 설명](https://i.namu.wiki/i/4xQD4LBkRRW5MdrFZj6vsSTZsN8kd1q_H4uXLi5D06yVH-u8NFtgCDglmR9e_8D2WFlwV8xn1-m1BWAQy_1Epw.webp)|![이미지 설명](https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzEwMDJfMTk5%2FMDAxNjk2MjQzMDA1NzIz.bQTDDIsp-bjgE13OvFoRsDnNv0GkFU1fJ0KL3gwnykUg.srdYObvEBVywhc-rcqnBo7T6h_99H1HY0s-ZTSzO--Yg.JPEG.kywcreamkorea2%2Fe57d336fa20df4b2a021c58f39049057.jpg&type=sc960_832)|![이미지 설명](https://i.namu.wiki/i/5XTI4-4KzG1GDEwZVvFcwT-48vLagDBSB9bW8IZBYmtgAwaV3rnUKzSP9hM_D6j5DJSCPb9iRe7a5wYiPfOUZw.webp)|![이미지 설명](https://mblogthumb-phinf.pstatic.net/MjAxNzAyMDNfMTM4/MDAxNDg2MDUyMzIwNDQ3.3bXoZMTQgPxyuQsjGsVuq0M4NnfUHNOow0srviDo1mAg.S-AjxImiYSNULYn7P_WMSFxDOI8O_jDfJV6Tz_2PqWIg.JPEG.xenom/image_5529839161486050882902.jpg?type=w800)|![이미지 설명](https://i.namu.wiki/i/o81kFfad6uoV0sN0iGSqA3hEKyIniZUhP7VBq2dI3WeyOFalhAEa_lQ_SY0GEbC_oJ4qzLlKokalWFk6cx86vg.webp)|
 |------------------------|------------------------|------------------------|------------------------|------------------------|------------------------|
 |     팀장 박선우         |        김가영           |       조하은          |         허진호          |        이민경          |        이서윤          |
+|<p align="center"><a href="https://github.com/melly8954"><img src="https://img.shields.io/badge/github-181717.svg?style=for-the-badge&logoColor=white" /></a>|<p align="center"><a href="https://github.com/gahyoung920-eng"><img src="https://img.shields.io/badge/github-181717.svg?style=for-the-badge&logoColor=white" /></a>| <p align="center"><a href="https://github.com/haeuniiii"><img src="https://img.shields.io/badge/github-181717.svg?style=for-the-badge&logoColor=white" /></a>|<p align="center"><a href="https://github.com/melly8954"><img src="https://img.shields.io/badge/github-181717.svg?style=for-the-badge&logoColor=white" /></a>|<p align="center"><a href="https://github.com/LeeJin0801"><img src="https://img.shields.io/badge/github-181717.svg?style=for-the-badge&logoColor=white" /></a>|<p align="center"><a href="https://github.com/alskung1101"><img src="https://img.shields.io/badge/github-181717.svg?style=for-the-badge&logoColor=white" /></a>|<p align="center"><a href="https://github.com/leesy744"><img src="https://img.shields.io/badge/github-181717.svg?style=for-the-badge&logoColor=white" /></a>|
+
 ---
+
 ## 🗃️ 프로젝트 개요 <a id="overview"></a>
 
 <p align="center">
   <img src="https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/background/background2.png?raw=true" width="900px">
 </p>
+<br>
 
-조직 규모가 작을 경우 엑셀이나 간단한 문서 관리만으로도 인사 및 근태 관리가 가능하지만, 인원이 증가하고 조직 구조가 복잡해질수록 근무 유형, 휴가 정책, 급여 산정 기준 등 인사 제도 역시 다양해지며 기존의 수동적인 관리 방식은 한계에 도달하게 된다.
-특히 중소기업의 경우 전용 HR 시스템 도입이 어려워 인사·근태·급여 관리가 엑셀이나 수기 문서에 의존하는 경우가 많으며, 이로 인해 데이터 중복 및 입력 오류, 정책 적용의 불일치, 인사 변경 이력 관리의 어려움과 같은 문제가 반복적으로 발생한다.
+### 시스템 목적
 
-또한 인사 정보가 여러 파일과 문서로 분산되어 관리될 경우 인사 담당자의 수작업 부담이 증가하고, 근태·휴가·급여 산정 기준이 명확하게 관리되지 않아 조직 운영의 투명성과 신뢰성을 저하시킬 수 있다. 승인 절차나 정책 변경 이력을 체계적으로 추적하기 어려운 점 역시 인사 관리의 중요한 문제로 작용한다.
+HR 도메인은 인사 정보, 근태 기록, 휴가 정책, 급여 산정 등
+여러 업무가 서로 밀접하게 연결된 통합 도메인입니다.
+그러나 실제 현장에서는 인사, 근태, 급여가
+엑셀이나 수작업 정산 등 개별적인 방식으로 분리되어 관리되는 경우가 많아,
+데이터 불일치와 운영 비효율이 반복적으로 발생합니다.
 
-본 프로젝트는 이러한 문제를 해결하기 위해 인사·근태·휴가·급여 데이터를 하나의 시스템으로 통합 관리할 수 있는 HR 관리 시스템의 데이터베이스 구조를 설계·구현하는 것을 목표로 한다. HR 관련 데이터를 중앙 집중적으로 관리함으로써 데이터의 일관성과 정확성을 확보하고, 표준화된 인사 정책 및 업무 프로세스를 통해 효율적인 인사 관리 체계를 구축하고자 한다.
+본 프로젝트는 중소기업에서 중견기업 규모로 성장하는 기업 환경에서
+인사·근태·급여 관리의 복잡도가 급격히 증가하는 HR 영역의 특성을 고려하여
+해당 도메인을 중심으로 통합 관리 구조를 설계하는 것을 목적으로 합니다.
 
-특히 승인 및 변경 이력 기반의 데이터 구조를 설계하여 인사 데이터의 투명성과 추적 가능성을 확보하고, 근속연수 기반 연차 산정, 급여 항목 집계 등 반복적인 관리 업무를 시스템적으로 자동화할 수 있는 기반을 마련한다. 또한 향후 조직 규모 확대, 인사 정책 변경, 급여·세무 등 HR 서비스 기능 확장에 유연하게 대응할 수 있도록 확장성과 유지보수성을 고려한 구조를 설계하는 것을 지향한다.
+이를 통해 HR 데이터의 연관 관계를 고려한 구조적 설계를 수행하고
+인사·근태·급여 도메인 간 데이터 흐름을
+일관되게 관리할 수 있는 기반을 마련하고자 합니다. <br><br>
 
-이를 통해 본 프로젝트는 단순한 인사 정보 관리 수준을 넘어, 중소기업 환경에 적합한 통합 HR 관리 시스템 설계 모델을 제시하고 향후 종합 HR 그룹웨어로 발전할 수 있는 기반을 마련하고자 한다.
+### 주요 기능
+
+👥 인사 관리<br>
+사원, 부서, 직급, 근무 유형 등 기본 인사 정보를 관리하고
+인사 상태 변경 및 조직 구조 변화를 이력 기반으로 추적할 수 있도록 설계했습니다.<br>
+
+⏱ 근태 관리<br>
+출퇴근 기록과 초과 근무 내역을 관리하며
+근무 유형과 근태 상태에 따른 데이터 흐름을 고려한 구조로 설계했습니다.<br>
+
+🌴 휴가 관리<br>
+휴가 유형과 휴가 신청 및 승인 이력을 관리하며
+근속연수 기반 연차 산정을 포함한 데이터 구조를 구성했습니다.<br>
+
+💰 급여 관리<br>
+급여 항목, 급여 명세서, 공제 항목을 분리하여 설계하고
+근태 및 휴가 데이터가 급여 산정에 반영될 수 있는 구조를 고려했습니다.<br><br>
 
 [참고자료]
 
@@ -55,17 +82,19 @@
 
 (https://en.wikipedia.org/wiki/Human_resource_management_system?utm_source)
 
-(https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/background/background1.jpg?raw=true)
 
-
-
+<br>
 
 ## 📊 WBS <a id="wbs"></a>
 ![WBS](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/WBS.png?raw=true)
 
+<br>
+
 ## 📄 요구사항 정의서 <a id="req"></a>
 ![요구사항 정의서](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD%20%EC%A0%95%EC%9D%98%EC%84%9C.png?raw=true)
 [요구사항정의서](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD%EC%A0%95%EC%9D%98%EC%84%9C.pdf)
+
+<br>
 
 ## 📉 유스케이스 다이어그램 <a id="usecase"></a>
 ![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9C%A0%EC%8A%A4%EC%BC%80%EC%9D%B4%EC%8A%A4.png.jpg?raw=true)
@@ -73,13 +102,19 @@
 [유스케이스 다이어그램_급여](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9C%A0%EC%8A%A4%EC%BC%80%EC%9D%B4%EC%8A%A4_%EA%B8%89%EC%97%AC.jpg?raw=true)
 [유스케이스 다이어그램_인사](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9C%A0%EC%8A%A4%EC%BC%80%EC%9D%B4%EC%8A%A4_%EC%8B%9C%EC%8A%A4%ED%85%9C.png?raw=true)
 
+<br>
+
 ## 📟 ERD <a id="erd"></a>
 ![ERD](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/ERD/erd_%EC%B5%9C%EC%A2%85.png?raw=true)
 [ERD](https://www.erdcloud.com/d/hLqoWtFvg3D66TXxy)
 
+<br>
+
 ## 📔 테이블 명세서 <a id="table"></a>
 ![테이블명세서](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%ED%85%8C%EC%9D%B4%EB%B8%94%EB%AA%85%EC%84%B8%EC%84%9C.png?raw=true)
 [테이블 명세서](https://docs.google.com/spreadsheets/d/1bMPiAibxTx_nkmMtBs_68mXrzGxFVBBJmr9qm585SD8/edit?gid=1688343712#gid=1688343712)
+
+<br>
 
 ## 💻 SQL 산출물 <a id="sql"></a>
 <details>
@@ -426,7 +461,7 @@ CREATE TABLE payslip_access (
 ```
   </details>   
   <details>
-        <summary>payslip_item</summary>
+        <summary>pay_item</summary>
         
 ```sql
 CREATE TABLE pay_item (
@@ -2187,7 +2222,7 @@ CALL emp_leave(2,2,'개인 사유로 인한 휴직');
 CALL emp_return(2,2,'휴직 종료 및 복직');
 ```
 ![재직처리전](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%9E%AC%EC%A7%81%EC%B2%98%EB%A6%AC%20%EC%A0%84.png?raw=true)
-![재직처리후](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%9E%AC%EC%A7%81%EC%B2%98%EB%A6%AC%20%EC%A0%84.png?raw=true)
+![재직처리후](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%9E%AC%EC%A7%81%EC%B2%98%EB%A6%AC%20%ED%9B%84.png?raw=true)
   </details>   
    <details>
         <summary> 사원의 퇴직 처리</summary>
@@ -2268,7 +2303,7 @@ CALL check_out(3, '2026-01-27', '2026-01-28 02:00:00');
 -- 결근기록
 CALL attendance_finalize_daily('2026-01-25');
 ```
-![결근기록](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B7%BC%ED%83%9C%ED%9C%B4%EA%B0%80%20%EC%82%AC%EC%A7%84/%EA%B2%B0%EA%B7%BC%EA%B8%B0%EB%A1%9D%20%EB%93%B1%EB%A1%9D.png?raw=true)
+![결근기록](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B7%BC%ED%83%9C%ED%9C%B4%EA%B0%80%20%EC%82%AC%EC%A7%84/%EA%B2%B0%EA%B7%BC%EA%B8%B0%EB%A1%9D%20%EB%93%B1%EB%A1%9D%20new.png?raw=true)
   </details>   
    <details>
         <summary> 출퇴근 기록 조회 </summary>
@@ -2283,7 +2318,7 @@ CALL attendance_record_select(NULL, 1, '2026-01-01', '2026-01-31');
 CALL attendance_record_select(NULL, NULL, '2026-01-01', '2026-01-31');
 ```
 ![출퇴근 기록 조회(개인)](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B7%BC%ED%83%9C%ED%9C%B4%EA%B0%80%20%EC%82%AC%EC%A7%84/%EC%B6%9C%ED%87%B4%EA%B7%BC%EA%B8%B0%EB%A1%9D%20%EC%A1%B0%ED%9A%8C(%EA%B0%9C%EC%9D%B8%EB%B3%84).png?raw=true)
-![출퇴근 기록 조회(부서)](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B7%BC%ED%83%9C%ED%9C%B4%EA%B0%80%20%EC%82%AC%EC%A7%84/%EC%B6%9C%ED%87%B4%EA%B7%BC%EA%B8%B0%EB%A1%9D%20%EC%A1%B0%ED%9A%8C(%EB%B6%80%EC%84%9C%EB%B3%84).png?raw=true)
+![출퇴근 기록 조회(부서)](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B7%BC%ED%83%9C%ED%9C%B4%EA%B0%80%20%EC%82%AC%EC%A7%84/%EC%B6%9C%ED%87%B4%EA%B7%BC%EA%B8%B0%EB%A1%9D%EC%A1%B0%ED%9A%8C(%EB%B6%80%EC%84%9C%EB%B3%84)%20new.png?raw=true)
 ![출퇴근 기록 조회(기간)](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B7%BC%ED%83%9C%ED%9C%B4%EA%B0%80%20%EC%82%AC%EC%A7%84/%EC%B6%9C%ED%87%B4%EA%B7%BC%EA%B8%B0%EB%A1%9D%20%EC%A1%B0%ED%9A%8C(%EA%B8%B0%EA%B0%84%EB%B3%84).png?raw=true)
   </details>   
    <details>
@@ -2345,23 +2380,13 @@ CALL leave_request_approve(2, 1);
 ![휴가 승인](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B7%BC%ED%83%9C%ED%9C%B4%EA%B0%80%20%EC%82%AC%EC%A7%84/%ED%9C%B4%EA%B0%80%20%EC%8A%B9%EC%9D%B8.png?raw=true)
   </details>   
    <details>
-        <summary> 초과근무 반려 </summary>
-
-```sql
--- 초과근무 반려
-CALL overtime_record_approve(9, 1);
-CALL overtime_record_reject(2, 3, '사전 신청 누락');
-```
-![초과근무 반려](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B7%BC%ED%83%9C%ED%9C%B4%EA%B0%80%20%EC%82%AC%EC%A7%84/%EC%B4%88%EA%B3%BC%EA%B7%BC%EB%AC%B4%20%EB%B0%98%EB%A0%A4.png?raw=true)
-  </details>   
-   <details>
         <summary> 휴가 반려 </summary>
 
 ```sql
 -- 휴가 반려
-CALL leave_request_reject(3, 1, '증빙 서류 미첨부');
+CALL leave_request_reject(4, 2, '증빙 서류 미첨부');
 ```
-![휴가 반려](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B7%BC%ED%83%9C%ED%9C%B4%EA%B0%80%20%EC%82%AC%EC%A7%84/%ED%9C%B4%EA%B0%80%20%EB%B0%98%EB%A0%A4.png?raw=true)
+![휴가 반려](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B7%BC%ED%83%9C%ED%9C%B4%EA%B0%80%20%EC%82%AC%EC%A7%84/%ED%9C%B4%EA%B0%80%20%EB%B0%98%EB%A0%A4%20new.png?raw=true)
   </details>   
    <details>
         <summary> 근태 기록 수정 </summary>
@@ -2371,7 +2396,7 @@ CALL leave_request_reject(3, 1, '증빙 서류 미첨부');
 CALL attendance_record_update(3, 'LATE', NULL);
 ```
 ![근태기록 수정 전](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B7%BC%ED%83%9C%ED%9C%B4%EA%B0%80%20%EC%82%AC%EC%A7%84/%EA%B7%BC%ED%83%9C%EA%B8%B0%EB%A1%9D%20%EC%88%98%EC%A0%95%EC%A0%84.png?raw=true)
-![근태기록 수정 후](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B7%BC%ED%83%9C%ED%9C%B4%EA%B0%80%20%EC%82%AC%EC%A7%84/%EA%B7%BC%ED%83%9C%EA%B8%B0%EB%A1%9D%20%EC%88%98%EC%A0%95%EC%A0%84.png?raw=true)
+![근태기록 수정 후](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B7%BC%ED%83%9C%ED%9C%B4%EA%B0%80%20%EC%82%AC%EC%A7%84/%EA%B7%BC%ED%83%9C%EA%B8%B0%EB%A1%9D%20%EC%88%98%EC%A0%95%ED%9B%84.png?raw=true)
   </details>  
    <details>
         <summary> 개인 근태 이력 조회 </summary>
@@ -2420,20 +2445,20 @@ CALL pay_item_create('OVERTIME_NIGHT','야간근무 수당','EARN','RULE',NULL,'
 ![급여 항목 등록](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B8%89%EC%97%AC%20%ED%85%8C%EC%8A%A4%ED%8A%B8/%EA%B8%89%EC%97%AC%20%ED%95%AD%EB%AA%A9%20%EB%93%B1%EB%A1%9D%20%EC%8B%A4%ED%96%89%20%EA%B2%B0%EA%B3%BC.png?raw=true)
   </details>   
    <details>
-        <summary> 급여항목 요율 변경</summary>
+        <summary> 급여 항목 요율 변경</summary>
      
 ```sql
--- 급여항목 요율 변경
+-- 급여 항목 요율 변경
 CALL pay_item_update_value('INDUSTRIAL_ACCIDENT_INSURANCE',1.25);
 ```
 ![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B8%89%EC%97%AC%20%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%82%B0%EC%9E%AC%EB%B3%B4%ED%97%98%20%EC%9A%94%EC%9C%A8%20%EB%B3%80%EA%B2%BD%20%EC%8B%A4%ED%96%89%20%EA%B2%B0%EA%B3%BC.png?raw=true)
   </details>   
    <details>
-        <summary> 산재보험 활성화 상태 변경</summary>
+        <summary> 급여 항목 활성화 상태 변경</summary>
      
 ```sql
--- 급여항목 활성화 상태 변경
-CALL pay_item_toggle_use('INDUSTRIAL_ACCIDENT_INSURANCE','Y');
+-- 급여 항목 활성화 상태 변경
+CALL pay_item_toggle_use('INDUSTRIAL_ACCIDENT_INSURANCE','N');
 ```
 ![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B8%89%EC%97%AC%20%ED%85%8C%EC%8A%A4%ED%8A%B8/%EA%B8%89%EC%97%AC%20%ED%95%AD%EB%AA%A9%20%ED%99%9C%EC%84%B1%ED%99%94%20%EC%8B%A4%ED%96%89%20%EA%B2%B0%EA%B3%BC.png?raw=true)
  </details>   
@@ -2451,7 +2476,7 @@ CALL payslip_create(3, '2026-01');
      
 ```sql
 -- 급여 명세서 확정
-CALL payslip_confirm(10);
+CALL payslip_confirm(1);
 ```
 ![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B8%89%EC%97%AC%20%ED%85%8C%EC%8A%A4%ED%8A%B8/%EA%B8%89%EC%97%AC%20%EB%AA%85%EC%84%B8%EC%84%9C%20%ED%99%95%EC%A0%95%20%EC%8B%A4%ED%96%89%20%EA%B2%B0%EA%B3%BC.png?raw=true)
   </details>   
@@ -2460,7 +2485,7 @@ CALL payslip_confirm(10);
      
 ```sql
 -- 급여 명세서 조회
-CALL payslip_view_admin(10);
+CALL payslip_view_admin(1);
 ```
 ![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B8%89%EC%97%AC%20%ED%85%8C%EC%8A%A4%ED%8A%B8/%EA%B8%89%EC%97%AC%20%EB%AA%85%EC%84%B8%EC%86%8C%20%EC%A1%B0%ED%9A%8C%20%EC%8B%A4%ED%96%89%20%EA%B2%B0%EA%B3%BC1.png?raw=true)
 ![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EA%B8%89%EC%97%AC%20%ED%85%8C%EC%8A%A4%ED%8A%B8/%EA%B8%89%EC%97%AC%20%EB%AA%85%EC%84%B8%EC%84%9C%20%EC%A1%B0%ED%9A%8C%20%EC%8B%A4%ED%96%89%20%EA%B2%B0%EA%B3%BC2.png?raw=true)
@@ -2478,30 +2503,26 @@ CALL payslip_view_self(1, 1, '850814');
   
 </details>
 
+<br>
 
 ## 🛠️ 향후 확장 방향 <a id="future"></a>
 
 본 프로젝트는 HR 데이터의 통합 관리와 표준화된 업무 프로세스를 중심으로 HR 관리 시스템의 데이터베이스 구조를 설계하였다. 다만, 실제 운영 환경에 적용하기 위해서는 기능적·구조적 측면에서 다음과 같은 개선 및 확장 방향을 고려할 수 있다.
 
-**1. HR 업무 자동화 기능 고도화**
+**1. ERP 기반 다른 도메인과의 연계 확대**
 
-현재 시스템은 승인 상태 및 변경 이력 관리가 가능한 구조를 기반으로 설계되었으나, 향후에는 근속연수에 따른 연차 자동 산정, 초과 근무 시간 집계, 급여 항목 자동 계산 등 반복적인 HR 업무를 시스템적으로 처리할 수 있도록 자동화 로직을 강화할 수 있다. 이를 통해 인사 담당자의 수작업 부담을 줄이고 데이터 처리의 정확성과 신뢰성을 더욱 향상시킬 수 있다.
+현재 시스템은 HR 영역에 초점을 맞추었으나, 조직 운영의 핵심 데이터는 인사 정보 외에도 재무·회계, 생산·재고, 구매·자산 관리 등 다양한 ERP 도메인과 연결될 수 있습니다. 향후에는 HR 데이터를 기반으로 다른 도메인의 핵심 지표와 연계하거나, 공통 데이터 모델을 설계하여 조직 전반의 정보 일관성과 연계성을 확보할 수 있습니다.
 
-**2. 역할 및 권한 기반 접근 제어(RBAC) 확장**
+**2. 데이터 히스토리 및 변경 추적 강화**
 
-현 설계는 관리자 및 HR 담당자를 중심으로 한 권한 구조를 가정하고 있으나, 향후에는 일반 사원, 팀장, 관리자 등 사용자 역할에 따라 조회·입력·수정·승인 권한을 세분화하는 역할 기반 접근 제어(RBAC)를 도입할 수 있다. 이를 통해 인사 정보의 보안성을 강화하고 조직 내 권한 체계를 보다 명확하게 관리할 수 있다.
+인사 이력뿐 아니라 다른 ERP 도메인에서도 변경 내역을 기록하고 추적할 수 있도록 히스토리 테이블을 설계할 수 있습니다. 이를 통해 감사(Audit) 요구사항을 충족하고, 조직의 운영 투명성을 제고할 수 있습니다.
 
-**3. 모듈화 기반 시스템 확장성 강화**
+**3. 통계 및 분석 기반 의사결정 지원**
 
-조직 규모 확대나 인사 정책 변경에 유연하게 대응하기 위해 평가 관리, 교육 이력 관리, 인사 발령 관리 등 추가적인 HR 기능을 독립적인 모듈 형태로 확장할 수 있는 구조로 발전시킬 수 있다. 이러한 모듈화 설계는 다양한 조직 환경에 적용 가능한 범용 HR 플랫폼으로의 확장을 가능하게 한다.
+근태 현황, 휴가 사용 패턴, 급여 항목 분석 등 HR 데이터를 시각화하고 통계적으로 분석함으로써 조직 운영 전략을 지원할 수 있습니다. 더 나아가 재무·회계·생산 데이터와 결합하면, 인사·재무·운영 지표를 통합 분석하는 의사결정 지원 환경으로 확장할 수 있습니다.
 
-**4. 통계 및 분석 기능을 통한 의사결정 지원**
+<br>
 
-근태 현황, 휴가 사용 패턴, 부서별 인력 운영 현황 등을 분석하여 시각화된 통계 정보로 제공한다면, 관리자는 데이터 기반의 인사 전략 수립 및 인력 운영 의사결정을 보다 효율적으로 수행할 수 있을 것이다. 이를 통해 본 시스템은 단순 관리 도구를 넘어 의사결정 지원 시스템으로 발전할 수 있다.
-
-**5. 외부 시스템 연계를 통한 활용 범위 확장**
-
-급여 시스템, 회계 시스템, 전자결재 시스템 등 외부 시스템과의 연계를 통해 HR 데이터의 활용 범위를 확장할 수 있다. 이를 통해 조직 전반의 업무 흐름을 통합 관리할 수 있는 기반을 마련하고, HR 시스템의 실무 활용도를 더욱 높일 수 있다.
 
 ## 🎯회고록 <a id="retrospective"></a>
 
@@ -2519,7 +2540,7 @@ CALL payslip_view_self(1, 1, '850814');
 #### 🐶김가영 :
 #### 🐵조하은 :
 > 주제 선정부터 우여곡절이 많았던 첫 팀 프로젝트였지만, 완성도 있게 마무리할 수 있어 만족스럽습니다.
-프로젝트 경험이 있음에도 불구하고, 데이터베이스만을 사용해 프로젝트를 진행하는 과정은 매우 막막하게 느껴졌습니다. 일반적인 프로젝트와는 달리 눈에 보이는 결과가 거의 없었고, 머릿속으로 시뮬레이션을 반복하며 시간의 흐름을 세세하게 고려해야 했기 때문에 더욱 어렵게 느껴졌습니다. 눈에 보이지 않지만 가장 중요한 시스템의 뼈대를 직접 설계해보는 뜻깊은 시간이었습니다. 이번 프로젝트에서 쌓은 경험은 앞으로 진행할 프로젝트에서도 의미 있는 설계 기준이자 든든한 뼈대가 될 것이라 생각합니다.
+프로젝트 경험이 있음에도 불구하고, 데이터베이스만을 사용해 프로젝트를 진행하는 과정은 매우 막막하게 느껴졌습니다. 일반적인 프로젝트와는 달리 눈에 보이는 결과가 거의 없었고, 머릿속으로 시뮬레이션을 반복하며 시간의 흐름을 세세하게 고려해야 했기 때문에 더욱 어렵게 느껴졌습니다. 특히 PK, FK, UNIQUE와 같은 제약 조건들을 단순한 개념이 아니라 실제 설계 요소로 고민해야 했던 점이 인상 깊었습니다. 각 테이블 간의 관계를 어떻게 맺을지, 데이터의 중복과 무결성을 어떻게 보장할지를 직접 판단하며 설계하는 과정에서, 그동안 막연하게 알고 있던 개념들을 훨씬 명확하게 이해할 수 있었습니다. 눈에 보이지 않지만 가장 중요한 시스템의 뼈대를 직접 설계해보는 뜻깊은 시간이었습니다. 이번 프로젝트에서 쌓은 경험은 앞으로 진행할 프로젝트에서도 의미 있는 설계 기준이자 든든한 뼈대가 될 것이라 생각합니다.
 #### 🐱이민경 :
 > 프로젝트 초기 단계에서 요구사항 명세서와 ERD를 직접 설계하며 데이터베이스 설계의 중요성을 다시 한 번 체감할 수 있었습니다. 팀원들과 함께 요구사항을 논의하고 정리하는 과정에서 각 기능과 데이터가 어떻게 연결되는지에 대해 다양한 관점을 공유할 수 있었고 이를 바탕으로 테이블 명세서를 보다 구체적으로 작성할 수 있었습니다. 또한 테이블 간 관계와 무결성을 고려해 ERD를 설계하면서 전체 시스템 구조와 데이터 흐름을 체계적으로 이해할 수 있었습니다. 이 경험을 통해 팀원들과의 협업을 통한 설계 과정이 프로젝트의 방향성과 완성도를 높이는 데 중요한 역할을 한다는 점을 배울 수 있었습니다.
 #### 🐸허진호 :
@@ -2528,5 +2549,6 @@ CALL payslip_view_self(1, 1, '850814');
 특히 팀원분들과 함께 고민하고 피드백을 주고받는 과정에서 많은 것을 배울 수 있었고, 그 덕분에 끝까지 프로젝트를 마칠 수 있었다고 생각합니다.
 많이 알려주시고 도와주신 팀원분들께 진심으로 감사드립니다.
 #### 🐰이서윤 :
+> 이번 첫 SW프로젝트를 진행하면서 기능을 구현하기 전에 요구사항을 명확히 정리하는 과정이 개발 전반의 방향을 잡는 데 얼마나 중요한지 알게 되었습니다. 테이블 명세서를 작성하여 데이터 구조를 미리 설계하면 개발과 협업이 훨씬 수월해진다는 점을 알게 되었습니다. 이번 경험을 통해서 문서를 통해 생각을 정리하고 공유하는 개발자의 기본 역량을 배울 수 있었습니다.  같이 함께 한 팀원분들 너무 고생하셨습니다.
 
 
