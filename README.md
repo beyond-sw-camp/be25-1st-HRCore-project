@@ -83,14 +83,18 @@ HR 도메인은 인사 정보, 근태 기록, 휴가 정책, 급여 산정 등
 (https://en.wikipedia.org/wiki/Human_resource_management_system?utm_source)
 
 
-
+<br>
 
 ## 📊 WBS <a id="wbs"></a>
 ![WBS](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/WBS.png?raw=true)
 
+<br>
+
 ## 📄 요구사항 정의서 <a id="req"></a>
 ![요구사항 정의서](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD%20%EC%A0%95%EC%9D%98%EC%84%9C.png?raw=true)
 [요구사항정의서](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD%EC%A0%95%EC%9D%98%EC%84%9C.pdf)
+
+<br>
 
 ## 📉 유스케이스 다이어그램 <a id="usecase"></a>
 ![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9C%A0%EC%8A%A4%EC%BC%80%EC%9D%B4%EC%8A%A4.png.jpg?raw=true)
@@ -98,13 +102,19 @@ HR 도메인은 인사 정보, 근태 기록, 휴가 정책, 급여 산정 등
 [유스케이스 다이어그램_급여](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9C%A0%EC%8A%A4%EC%BC%80%EC%9D%B4%EC%8A%A4_%EA%B8%89%EC%97%AC.jpg?raw=true)
 [유스케이스 다이어그램_인사](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9C%A0%EC%8A%A4%EC%BC%80%EC%9D%B4%EC%8A%A4_%EC%8B%9C%EC%8A%A4%ED%85%9C.png?raw=true)
 
+<br>
+
 ## 📟 ERD <a id="erd"></a>
 ![ERD](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/ERD/erd_%EC%B5%9C%EC%A2%85.png?raw=true)
 [ERD](https://www.erdcloud.com/d/hLqoWtFvg3D66TXxy)
 
+<br>
+
 ## 📔 테이블 명세서 <a id="table"></a>
 ![테이블명세서](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%ED%85%8C%EC%9D%B4%EB%B8%94%EB%AA%85%EC%84%B8%EC%84%9C.png?raw=true)
 [테이블 명세서](https://docs.google.com/spreadsheets/d/1bMPiAibxTx_nkmMtBs_68mXrzGxFVBBJmr9qm585SD8/edit?gid=1688343712#gid=1688343712)
+
+<br>
 
 ## 💻 SQL 산출물 <a id="sql"></a>
 <details>
@@ -2493,30 +2503,26 @@ CALL payslip_view_self(1, 1, '850814');
   
 </details>
 
+<br>
 
 ## 🛠️ 향후 확장 방향 <a id="future"></a>
 
 본 프로젝트는 HR 데이터의 통합 관리와 표준화된 업무 프로세스를 중심으로 HR 관리 시스템의 데이터베이스 구조를 설계하였다. 다만, 실제 운영 환경에 적용하기 위해서는 기능적·구조적 측면에서 다음과 같은 개선 및 확장 방향을 고려할 수 있다.
 
-**1. HR 업무 자동화 기능 고도화**
+**1. ERP 기반 다른 도메인과의 연계 확대**
 
-현재 시스템은 승인 상태 및 변경 이력 관리가 가능한 구조를 기반으로 설계되었으나, 향후에는 근속연수에 따른 연차 자동 산정, 초과 근무 시간 집계, 급여 항목 자동 계산 등 반복적인 HR 업무를 시스템적으로 처리할 수 있도록 자동화 로직을 강화할 수 있다. 이를 통해 인사 담당자의 수작업 부담을 줄이고 데이터 처리의 정확성과 신뢰성을 더욱 향상시킬 수 있다.
+현재 시스템은 HR 영역에 초점을 맞추었으나, 조직 운영의 핵심 데이터는 인사 정보 외에도 재무·회계, 생산·재고, 구매·자산 관리 등 다양한 ERP 도메인과 연결될 수 있습니다. 향후에는 HR 데이터를 기반으로 다른 도메인의 핵심 지표와 연계하거나, 공통 데이터 모델을 설계하여 조직 전반의 정보 일관성과 연계성을 확보할 수 있습니다.
 
-**2. 역할 및 권한 기반 접근 제어(RBAC) 확장**
+**2. 데이터 히스토리 및 변경 추적 강화**
 
-현 설계는 관리자 및 HR 담당자를 중심으로 한 권한 구조를 가정하고 있으나, 향후에는 일반 사원, 팀장, 관리자 등 사용자 역할에 따라 조회·입력·수정·승인 권한을 세분화하는 역할 기반 접근 제어(RBAC)를 도입할 수 있다. 이를 통해 인사 정보의 보안성을 강화하고 조직 내 권한 체계를 보다 명확하게 관리할 수 있다.
+인사 이력뿐 아니라 다른 ERP 도메인에서도 변경 내역을 기록하고 추적할 수 있도록 히스토리 테이블을 설계할 수 있습니다. 이를 통해 감사(Audit) 요구사항을 충족하고, 조직의 운영 투명성을 제고할 수 있습니다.
 
-**3. 모듈화 기반 시스템 확장성 강화**
+**3. 통계 및 분석 기반 의사결정 지원**
 
-조직 규모 확대나 인사 정책 변경에 유연하게 대응하기 위해 평가 관리, 교육 이력 관리, 인사 발령 관리 등 추가적인 HR 기능을 독립적인 모듈 형태로 확장할 수 있는 구조로 발전시킬 수 있다. 이러한 모듈화 설계는 다양한 조직 환경에 적용 가능한 범용 HR 플랫폼으로의 확장을 가능하게 한다.
+근태 현황, 휴가 사용 패턴, 급여 항목 분석 등 HR 데이터를 시각화하고 통계적으로 분석함으로써 조직 운영 전략을 지원할 수 있습니다. 더 나아가 재무·회계·생산 데이터와 결합하면, 인사·재무·운영 지표를 통합 분석하는 의사결정 지원 환경으로 확장할 수 있습니다.
 
-**4. 통계 및 분석 기능을 통한 의사결정 지원**
+<br>
 
-근태 현황, 휴가 사용 패턴, 부서별 인력 운영 현황 등을 분석하여 시각화된 통계 정보로 제공한다면, 관리자는 데이터 기반의 인사 전략 수립 및 인력 운영 의사결정을 보다 효율적으로 수행할 수 있을 것이다. 이를 통해 본 시스템은 단순 관리 도구를 넘어 의사결정 지원 시스템으로 발전할 수 있다.
-
-**5. 외부 시스템 연계를 통한 활용 범위 확장**
-
-급여 시스템, 회계 시스템, 전자결재 시스템 등 외부 시스템과의 연계를 통해 HR 데이터의 활용 범위를 확장할 수 있다. 이를 통해 조직 전반의 업무 흐름을 통합 관리할 수 있는 기반을 마련하고, HR 시스템의 실무 활용도를 더욱 높일 수 있다.
 
 ## 🎯회고록 <a id="retrospective"></a>
 
