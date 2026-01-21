@@ -2213,6 +2213,7 @@ CALL register_employee_with_user('test04.dev@company.com','테스트사원04','0
 CALL update_employee_info(5,'test04_update.dev@company.com','테스트사원05','010-1234-5678',NULL,NULL,NULL,NULL);
 ```
 ![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%82%AC%EC%9B%90%20%EC%A0%95%EB%B3%B4%20%EC%88%98%EC%A0%95.png?raw=true)
+![](https://github.com/beyond-sw-camp/be25-1st-WDQ-HRCore/blob/main/%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%8C%8C%EC%9D%BC/%EC%9D%B8%EC%82%AC%EA%B4%80%EB%A6%AC_%EA%B8%B0%EB%8A%A5%ED%85%8C%EC%8A%A4%ED%8A%B8/%EC%82%AC%EC%9A%A9%EC%9E%90%20%EA%B3%84%EC%A0%95%20%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%20%EC%97%85%EB%8D%B0%EC%9D%B4%ED%8A%B8.png?raw=true)
   </details>   
    <details>
         <summary> 사원의 휴직 처리</summary>
